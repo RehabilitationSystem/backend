@@ -2,7 +2,7 @@ package com.example.newsystem01.controller.example;
 
 
 import com.example.newsystem01.entity.User;
-import com.example.newsystem01.JsonResult;
+import com.example.newsystem01.config.JsonResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

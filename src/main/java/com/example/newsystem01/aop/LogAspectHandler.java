@@ -19,7 +19,7 @@ public class LogAspectHandler {
 //    @Pointcut("@annotation(org.springframework.web.bind.annotation.GetMapping)")
 //    public void annotationCut() {}
 
-    @Pointcut("execution(* com.example.newsystem01.controller..*.*(..))")
+    @Pointcut("execution(* com.example.newsystem01.entity..*.*(..))")
     public void pointCut() {}
 
     /**

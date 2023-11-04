@@ -1,6 +1,6 @@
 package com.example.newsystem01.ExceptionDeal;
 
-import com.example.newsystem01.JsonResult;
+import com.example.newsystem01.config.JsonResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -40,6 +40,23 @@ public class GlobalExceptionHandler {
         logger.error("空指针异常，{}", ex.getMessage());
         return new JsonResult("500", "空指针异常了");
     }
+
+
+    /**
+     * 拦截业务异常，返回业务异常信息
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(BusinessErrorException.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    public JsonResult handleBusinessError(BusinessErrorException ex) {
+        String code = ex.getCode();
+        String message = ex.getMessage();
+        logger.error("业务异常：", ex);
+        return new JsonResult(code, message);
+    }
+
+
 
     /**
      * 系统异常 预期以外异常

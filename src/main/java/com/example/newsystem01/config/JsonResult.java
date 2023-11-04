@@ -1,4 +1,4 @@
-package com.example.newsystem01;
+package com.example.newsystem01.config;
 
 public class JsonResult<T> {
     private T data;

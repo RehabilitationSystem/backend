@@ -1,19 +1,23 @@
 package com.example.newsystem01.controller;
 
 import com.example.newsystem01.entity.User;
+import com.example.newsystem01.listener.MyEvent;
 import com.example.newsystem01.service.UserService;
 import jakarta.annotation.Resource;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/test")
 public class TestController {
 
     private final static Logger logger = LoggerFactory.getLogger(TestController.class);
+
+
 
     @Resource
     private UserService userService;
@@ -23,6 +27,15 @@ public class TestController {
     public User getUser(@PathVariable int id){
         return userService.getUserByName(id);
     }
+
+
+    @GetMapping("/user")
+    public User getUser(HttpServletRequest request) {
+        ServletContext application = request.getServletContext();
+        return (User) application.getAttribute("user");
+    }
+
+
 
     @RequestMapping("/log")
     public String testLog() {
@@ -39,7 +52,35 @@ public class TestController {
         return "success";
     }
 
+    @GetMapping("/adduser")
+    public String addUser() throws Exception {
+        userService.insertUser(new User(1,"zqq","asd"));
+        return "success";
+    }
 
+
+    /**
+     * 获取当前在线人数，该方法有bug
+     * @param request
+     * @return
+     */
+    @GetMapping("/total")
+    public String getTotalUser(HttpServletRequest request) {
+        Integer count = (Integer) request.getSession().getServletContext().getAttribute("count");
+        return "当前在线人数：" + count;
+    }
+
+    @GetMapping("/request")
+    public String getRequestInfo(HttpServletRequest request) {
+        System.out.println("requestListener中的初始化的name数据：" + request.getAttribute("name"));
+        return "success";
+    }
+
+    @GetMapping("/myEvent")
+    public String getUserInfo(){
+        User user2 = userService.getUser2();
+        return "success";
+    }
 
 
 }

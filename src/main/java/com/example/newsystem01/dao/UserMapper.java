@@ -6,6 +6,10 @@ import org.apache.ibatis.annotations.*;
 @Mapper
 public interface UserMapper {
 
+
+    @Insert("insert into user (user_name, password) values (#{username}, #{password})")
+    Integer insertUser(User user);
+
     @Select("select * from user where id = #{id}")
     @Results({
             @Result(property = "username", column = "user_name"),
