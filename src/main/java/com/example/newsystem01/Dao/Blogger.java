@@ -1,4 +1,4 @@
-package com.example.newsystem01.entity;
+package com.example.newsystem01.Dao;
 
 public class Blogger {
     private Long id;

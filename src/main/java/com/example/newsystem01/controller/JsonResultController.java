@@ -1,7 +1,7 @@
 package com.example.newsystem01.controller;
 
 
-import com.example.newsystem01.entity.User;
+import com.example.newsystem01.Dao.User;
 import com.example.newsystem01.JsonResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

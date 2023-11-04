@@ -4,7 +4,6 @@ import com.example.newsystem01.JsonResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -42,20 +41,6 @@ public class GlobalExceptionHandler {
         return new JsonResult("500", "空指针异常了");
     }
 
-
-    /**
-     * http请求方式 错误异常
-     * @param ex
-     * @return
-     */
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
-    public JsonResult handleWrongRequestMethod(Exception ex) {
-        logger.error("系统异常：", ex);
-        return new JsonResult("405", "请求方式错误");
-    }
-
-
     /**
      * 系统异常 预期以外异常
      * @param ex
@@ -67,8 +52,6 @@ public class GlobalExceptionHandler {
         logger.error("系统异常：", ex);
         return new JsonResult("500", "系统发生异常，请联系管理员");
     }
-
-
 
 
 }

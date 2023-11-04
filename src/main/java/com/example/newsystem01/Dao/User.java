@@ -1,13 +1,10 @@
-package com.example.newsystem01.entity;
+package com.example.newsystem01.Dao;
 
 public class User {
     private int id;
     private String username;
     private String password;
     /* 省略get、set和带参构造方法 */
-
-    public User() {
-    }
 
     public User(int id, String username, String password) {
         this.id = id;
