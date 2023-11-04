@@ -1,7 +1,7 @@
 package com.example.newsystem01.controller.example;
 
 
-import com.example.newsystem01.Dao.Blogger;
+import com.example.newsystem01.entity.Blogger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

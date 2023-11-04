@@ -1,6 +1,6 @@
 package com.example.newsystem01.controller.example;
 
-import com.example.newsystem01.Dao.User;
+import com.example.newsystem01.entity.User;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;

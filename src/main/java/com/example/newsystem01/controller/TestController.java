@@ -1,10 +1,10 @@
 package com.example.newsystem01.controller;
 
-import com.example.newsystem01.Dao.User;
-import com.example.newsystem01.JsonResult;
+import com.example.newsystem01.entity.User;
+import com.example.newsystem01.service.UserService;
+import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +15,14 @@ public class TestController {
 
     private final static Logger logger = LoggerFactory.getLogger(TestController.class);
 
+    @Resource
+    private UserService userService;
 
+
+    @RequestMapping("/getUser/{id}")
+    public User getUser(@PathVariable int id){
+        return userService.getUserByName(id);
+    }
 
     @RequestMapping("/log")
     public String testLog() {

@@ -1,4 +1,4 @@
-package com.example.newsystem01.Dao;
+package com.example.newsystem01.entity;
 
 public class User {
     private int id;
