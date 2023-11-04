@@ -1,4 +1,4 @@
-package com.example.newsystem01.controller;
+package com.example.newsystem01.controller.example;
 
 import com.example.newsystem01.config.MicroServiceUrl;
 import jakarta.annotation.Resource;
