@@ -1,7 +1,7 @@
 package com.example.newsystem01.controller.example;
 
-import com.example.newsystem01.ExceptionDeal.BusinessErrorException;
-import com.example.newsystem01.ExceptionDeal.BusinessMsgEnum;
+import com.example.newsystem01.exceptiondeal.BusinessErrorException;
+import com.example.newsystem01.exceptiondeal.BusinessMsgEnum;
 import com.example.newsystem01.config.JsonResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

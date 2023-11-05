@@ -1,4 +1,4 @@
-package com.example.newsystem01.ExceptionDeal;
+package com.example.newsystem01.exceptiondeal;
 
 import com.example.newsystem01.config.JsonResult;
 import org.slf4j.Logger;
