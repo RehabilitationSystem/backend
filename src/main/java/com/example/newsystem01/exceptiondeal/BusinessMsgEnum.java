@@ -1,4 +1,4 @@
-package com.example.newsystem01.ExceptionDeal;
+package com.example.newsystem01.exceptiondeal;
 
 /**
  * 业务异常提示信息枚举类

@@ -5,6 +5,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties(prefix = "url")
+
+//# 配置多个微服务的配置文件格式（基于yml）
+//url:
+//  # 订单微服务的地址
+//  orderUrl: http://localhost:8002
+//  # 用户微服务的地址
+//  userUrl: http://localhost:8003
+//  # 购物车微服务的地址
+//  shoppingUrl: http://localhost:8004
 public class MicroServiceUrl {
 
     private String orderUrl;
