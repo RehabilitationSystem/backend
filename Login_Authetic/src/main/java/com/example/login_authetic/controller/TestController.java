@@ -17,21 +17,21 @@ public class TestController {
 
 
 
-    @Resource
-    private UserService userService;
-
-
-    @RequestMapping("/getUser/{id}")
-    public User getUser(@PathVariable int id){
-        return userService.getUserByName(id);
-    }
-
-
-    @GetMapping("/user")
-    public User getUser(HttpServletRequest request) {
-        ServletContext application = request.getServletContext();
-        return (User) application.getAttribute("user");
-    }
+//    @Resource
+//    private UserService userService;
+//
+//
+//    @RequestMapping("/getUser/{id}")
+//    public User getUser(@PathVariable int id){
+//        return userService.getUserByName(id);
+//    }
+//
+//
+//    @GetMapping("/user")
+//    public User getUser(HttpServletRequest request) {
+//        ServletContext application = request.getServletContext();
+//        return (User) application.getAttribute("user");
+//    }
 
 
 
@@ -50,11 +50,11 @@ public class TestController {
         return "success";
     }
 
-    @GetMapping("/adduser")
-    public String addUser() throws Exception {
-        userService.insertUser(new User(1,"zqq","asd"));
-        return "success";
-    }
+//    @GetMapping("/adduser")
+//    public String addUser() throws Exception {
+//        userService.insertUser(new User(1,"zqq","asd"));
+//        return "success";
+//    }
 
 
     /**
@@ -74,11 +74,11 @@ public class TestController {
         return "success";
     }
 
-    @GetMapping("/myEvent")
-    public String getUserInfo(){
-        User user2 = userService.getUser2();
-        return "success";
-    }
+//    @GetMapping("/myEvent")
+//    public String getUserInfo(){
+//        User user2 = userService.getUser2();
+//        return "success";
+//    }
 
 
 }

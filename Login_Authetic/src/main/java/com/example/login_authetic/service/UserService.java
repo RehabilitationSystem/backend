@@ -5,11 +5,6 @@ import com.example.login_authetic.entity.User;
 
 
 public interface UserService {
-    User getUserByName(int name);
-
-    void insertUser(User user);
-
-    User getUser();
-
-    User getUser2();
+    public User login(User user);
+    public void register(User user);
 }

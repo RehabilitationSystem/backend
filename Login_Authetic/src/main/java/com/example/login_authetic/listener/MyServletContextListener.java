@@ -22,9 +22,9 @@ public class MyServletContextListener implements ApplicationListener<ContextRefr
         ApplicationContext applicationContext = contextRefreshedEvent.getApplicationContext();
         // 获取对应的service
         UserService userService = applicationContext.getBean(UserService.class);
-        User user = userService.getUser();
+//        User user = userService.getUser();
         // 获取application域对象，将查到的信息放到application域中
         ServletContext application = applicationContext.getBean(ServletContext.class);
-        application.setAttribute("user", user);
+//        application.setAttribute("user", user);
     }
 }
