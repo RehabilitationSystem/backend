@@ -10,4 +10,5 @@ class NewController {
     public String sayHello(){
         return "hello";
     }
+
 }
