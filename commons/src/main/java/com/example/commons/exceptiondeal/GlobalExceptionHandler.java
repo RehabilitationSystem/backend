@@ -46,6 +46,10 @@ public class GlobalExceptionHandler {
         return new JsonResult("500", "空指针异常了");
     }
 
+
+
+
+
     /**
      * 拦截业务异常，返回业务异常信息
      * @param ex

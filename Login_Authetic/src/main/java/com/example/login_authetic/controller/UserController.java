@@ -18,8 +18,9 @@ class UserController {
 
     @PostMapping("/1.0/login")
     public JsonResult<User> Login(@RequestBody @Validated({LoginGroup.class, Default.class}) User user){
-        User login = userService.login(user);
-        return new JsonResult<>(login,"200","登录成功！");
+        //使用shiro编写认证操作
+        userService.login(user);
+        return new JsonResult<>("200","登录成功！");
     }
 
     @PostMapping("/1.0/register")

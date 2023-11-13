@@ -9,6 +9,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
+
 @Service
 public class UserServiceImpl implements UserService{
 
@@ -48,6 +50,22 @@ public class UserServiceImpl implements UserService{
             throw new BusinessErrorException(BusinessMsgEnum.UNEXPECTED_EXCEPTION);
         }
 
+    }
+
+    @Override
+    public Set<String> getRoles(String username) {
+        return null;
+    }
+
+    @Override
+    public Set<String> getPermissions(String username) {
+        return null;
+    }
+
+    @Override
+    public User getByPhone(String phone) {
+
+        return null;
     }
 
 
