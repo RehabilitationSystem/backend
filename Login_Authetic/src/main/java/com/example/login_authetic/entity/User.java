@@ -1,9 +1,23 @@
 package com.example.login_authetic.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.validation.constraints.*;
-import org.hibernate.validator.constraints.Length;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+
+import java.util.List;
+
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class User {
     @Pattern(regexp = "^((13[0-9])|(14[5,7,9])|(15([0-3]|[5-9]))|(166)|(17[0,1,3,5,6,7,8])|(18[0-9])|(19[8|9]))\\d{8}$", message = "手机号格式错误")
     @NotNull(message = "电话号码不能为null")
@@ -21,19 +35,7 @@ public class User {
     private String password;
     /* 省略get、set和带参构造方法 */
 
-    public User(String phone, String password) {
-        this.phone = phone;
-        this.password = password;
-    }
 
-    public User() {
-    }
-
-    public User(String phone, String username, String password) {
-        this.phone = phone;
-        this.username = username;
-        this.password = password;
-    }
 
     public String getPhone() {
         return phone;

@@ -16,7 +16,8 @@ public enum BusinessMsgEnum {
     // 还可以定义更多的业务异常
     USER_NOT_EXISTED("400","该用户不存在！"),
     PASSWORD_WRONG_EXISTED("400","密码错误！"),
-    USER_IS_EXISTED("400","用户已经存在！");
+    USER_IS_EXISTED("400","用户已经存在！"),
+    TOKEN_NOT_USED("403","token令牌未被携带！");
     /**
      * 消息码
      */

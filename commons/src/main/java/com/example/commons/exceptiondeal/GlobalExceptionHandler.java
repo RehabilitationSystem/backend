@@ -1,5 +1,6 @@
 package com.example.commons.exceptiondeal;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.commons.config.JsonResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,6 +93,18 @@ public class GlobalExceptionHandler {
             logger.error("参数异常",error.getDefaultMessage());
         }
         return new JsonResult<HashMap<String,String>>(errMap,"400",e.getMessage());
+    }
+
+    /**
+     * token认证失败异常处理 - JWTVerificationException
+     * controller中方法上配置token校验，校验不通过会抛出JWTVerificationException
+     */
+    @ExceptionHandler(JWTVerificationException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public Object handlerViolationException(JWTVerificationException ex) {
+        String message = ex.getMessage();
+        logger.error("token认证异常异常：", ex);
+        return new JsonResult("403", message);
     }
 
 
