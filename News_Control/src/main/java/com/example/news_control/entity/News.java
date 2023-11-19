@@ -1,60 +1,73 @@
 package com.example.news_control.entity;
 
-public class News {
-    private Integer news_id;
-    private String news_title;
-    private String news_info;
-    private String create_time;
-    private String update_time;
+import java.sql.Date;
 
+public class News {
     @Override
     public String toString() {
         return "News{" +
-                "news_id=" + news_id +
-                ", news_title='" + news_title + '\'' +
-                ", news_info='" + news_info + '\'' +
-                ", create_time='" + create_time + '\'' +
-                ", update_time='" + update_time + '\'' +
+                "new_id=" + new_id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", create_time=" + create_time +
+                ", publish_id=" + publish_id +
+                ", editor_id=" + editor_id +
                 '}';
     }
 
-    public Integer getNews_id() {
-        return news_id;
+    public int getNew_id() {
+        return new_id;
     }
 
-    public void setNews_id(Integer news_id) {
-        this.news_id = news_id;
+    public void setNew_id(int new_id) {
+        this.new_id = new_id;
     }
 
-    public String getNews_title() {
-        return news_title;
+    public String getTitle() {
+        return title;
     }
 
-    public void setNews_title(String news_title) {
-        this.news_title = news_title;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getNews_info() {
-        return news_info;
+    public String getContent() {
+        return content;
     }
 
-    public void setNews_info(String news_info) {
-        this.news_info = news_info;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public String getCreate_time() {
+    public Date getCreate_time() {
         return create_time;
     }
 
-    public void setCreate_time(String create_time) {
+    public void setCreate_time(Date create_time) {
         this.create_time = create_time;
     }
 
-    public String getUpdate_time() {
-        return update_time;
+    public int getPublish_id() {
+        return publish_id;
     }
 
-    public void setUpdate_time(String update_time) {
-        this.update_time = update_time;
+    public void setPublish_id(int publish_id) {
+        this.publish_id = publish_id;
     }
+
+    public int getEditor_id() {
+        return editor_id;
+    }
+
+    public void setEditor_id(int editor_id) {
+        this.editor_id = editor_id;
+    }
+
+    private int new_id;
+    private String title;
+    private String content;
+    private Date create_time;
+    private int publish_id;
+    private int editor_id;
+
 }

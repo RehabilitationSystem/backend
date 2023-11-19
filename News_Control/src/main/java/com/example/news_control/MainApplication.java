@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:/application.properties")
 @MapperScan("com.example.login_authetic.dao")
+@MapperScan("com.example.News_Control.dao")
 @SpringBootApplication(scanBasePackages = {"com.example.news_control","com.example.login_authetic","com.example.comment_control","com.example.logger_security"})
 public class MainApplication {
     public static void main(String[] args) {

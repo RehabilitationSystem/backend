@@ -1,14 +1,17 @@
 package com.example.news_control.service;
 
+import com.example.news_control.dao.NewsMapper;
 import com.example.news_control.entity.News;
-import org.apache.ibatis.session.*;
-
-import java.sql.Connection;
-
-class NewServiceImpl implements NewService{
-
+import jakarta.annotation.Resource;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+@Service
+public class NewServiceImpl implements NewsService{
+    @Autowired
+    private NewsMapper newMapper;
     @Override
-    public News getNews(Integer id) {
-        return null;
+    public News getNews(int new_id) {
+        return newMapper.getNewsById(new_id);
     }
 }
