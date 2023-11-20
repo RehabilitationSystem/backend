@@ -5,7 +5,8 @@ import com.example.commons.exceptiondeal.BusinessMsgEnum;
 import com.example.login_authetic.dao.UserMapper;
 import com.example.login_authetic.entity.User;
 import jakarta.annotation.Resource;
-import org.springframework.context.ApplicationContext;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +17,8 @@ public class UserServiceImpl implements UserService{
 
     @Resource
     private UserMapper userMapper;
+
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     /**
      *  根据电话号码查询用户，并且进行密码匹配。
@@ -28,7 +31,7 @@ public class UserServiceImpl implements UserService{
         if((user=userMapper.getUserByPhone(input.getPhone()))==null){
             throw new BusinessErrorException(BusinessMsgEnum.USER_NOT_EXISTED);
         }
-        if(!user.getPassword().equals(input.getPassword())){
+        if(!passwordEncoder.matches(input.getPassword(),user.getPassword())){
             throw new BusinessErrorException(BusinessMsgEnum.PASSWORD_WRONG_EXISTED);
         }
 //        密码尽量不传输
@@ -46,6 +49,7 @@ public class UserServiceImpl implements UserService{
         if(userMapper.getUserByPhone(input.getPhone())!=null){
             throw new BusinessErrorException(BusinessMsgEnum.USER_IS_EXISTED);
         }
+        input.setPassword(passwordEncoder.encode(input.getPassword()));
         if(userMapper.insertUser(input.getPhone(),input.getUsername(),input.getPassword())==0){
             throw new BusinessErrorException(BusinessMsgEnum.UNEXPECTED_EXCEPTION);
         }

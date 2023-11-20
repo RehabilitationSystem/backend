@@ -4,6 +4,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.example.commons.LoginInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -48,9 +49,14 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
         converters.add(converter);
     }
 
+    @Bean
+    public LoginInterceptor initLoginInterceptor() {
+        return new LoginInterceptor();
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 实现WebMvcConfigurer不会导致静态资源被拦截
-        registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(initLoginInterceptor()).addPathPatterns("/**");
     }
 }

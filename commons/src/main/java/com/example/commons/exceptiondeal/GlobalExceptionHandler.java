@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -106,6 +107,20 @@ public class GlobalExceptionHandler {
         logger.error("token认证异常异常：", ex);
         return new JsonResult("403", message);
     }
+
+
+    /**
+     * token认证失败异常处理 - JWTVerificationException
+     * controller中方法上配置token校验，校验不通过会抛出JWTVerificationException
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public Object handlerViolationException(HttpRequestMethodNotSupportedException ex) {
+        String message = ex.getMessage();
+        logger.error("请求方式错误异常：", ex);
+        return new JsonResult("405", message);
+    }
+
 
 
     /**

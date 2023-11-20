@@ -17,7 +17,10 @@ public enum BusinessMsgEnum {
     USER_NOT_EXISTED("400","该用户不存在！"),
     PASSWORD_WRONG_EXISTED("400","密码错误！"),
     USER_IS_EXISTED("400","用户已经存在！"),
-    TOKEN_NOT_USED("403","token令牌未被携带！");
+    TOKEN_HAS_EXPIRED("401","token是伪造的或者token已过期！"),
+    TOKEN_STOLEN("401","token是盗用的！"),
+    TOKEN_SAME_COUNTER("401","token可能是被重放的！"),
+    TOKEN_NOT_USED("401","token令牌未被携带！");
     /**
      * 消息码
      */
