@@ -12,9 +12,15 @@ public enum BusinessMsgEnum {
     /** 参数过大 */
     PARMETER_BIG_EXCEPTION("102", "输入的图片数量不能超过50张!"),
     /** 500 : 一劳永逸的提示也可以在这定义 */
-    UNEXPECTED_EXCEPTION("500", "系统发生异常，请联系管理员！");
+    UNEXPECTED_EXCEPTION("500", "系统发生异常，请联系管理员！"),
     // 还可以定义更多的业务异常
-
+    USER_NOT_EXISTED("400","该用户不存在！"),
+    PASSWORD_WRONG_EXISTED("400","密码错误！"),
+    USER_IS_EXISTED("400","用户已经存在！"),
+    TOKEN_HAS_EXPIRED("401","token是伪造的或者token已过期！"),
+    TOKEN_STOLEN("401","token是盗用的！"),
+    TOKEN_SAME_COUNTER("401","token可能是被重放的！"),
+    TOKEN_NOT_USED("401","token令牌未被携带！");
     /**
      * 消息码
      */

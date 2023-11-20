@@ -3,9 +3,12 @@ package com.example.commons.config;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.example.commons.LoginInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import java.nio.charset.Charset;
@@ -13,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-public class fastJsonConfig extends WebMvcConfigurationSupport {
+public class WebMvcConfig extends WebMvcConfigurationSupport {
 
     /**
      * 使用阿里 FastJson 作为JSON MessageConverter
@@ -44,5 +47,16 @@ public class fastJsonConfig extends WebMvcConfigurationSupport {
         mediaTypeList.add(MediaType.APPLICATION_JSON);
         converter.setSupportedMediaTypes(mediaTypeList);
         converters.add(converter);
+    }
+
+    @Bean
+    public LoginInterceptor initLoginInterceptor() {
+        return new LoginInterceptor();
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 实现WebMvcConfigurer不会导致静态资源被拦截
+        registry.addInterceptor(initLoginInterceptor()).addPathPatterns("/**");
     }
 }
