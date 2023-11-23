@@ -57,6 +57,6 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 实现WebMvcConfigurer不会导致静态资源被拦截
-        registry.addInterceptor(initLoginInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(initLoginInterceptor()).addPathPatterns("/**").excludePathPatterns("/error");
     }
 }

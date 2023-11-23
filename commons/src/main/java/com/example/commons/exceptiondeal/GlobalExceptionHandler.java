@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
      * @return
      */
     @ExceptionHandler(BusinessErrorException.class)
-    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     public JsonResult handleBusinessError(BusinessErrorException ex) {
         String code = ex.getCode();
         String message = ex.getMessage();
