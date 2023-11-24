@@ -42,6 +42,7 @@ public class User {
         this.roleId = roleId;
     }
 
+
     private Integer roleId;
     /* 省略get、set和带参构造方法 */
 

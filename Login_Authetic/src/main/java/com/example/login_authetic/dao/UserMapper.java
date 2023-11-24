@@ -9,7 +9,7 @@ import java.util.Set;
 public interface UserMapper {
     @Select("select * from user where  phone = #{phone}")
     @Results({
-            @Result(property = "username", column = "user_name"),
+            @Result(property = "username", column = "username"),
             @Result(property = "password", column = "password"),
             @Result(property = "phone", column = "phone")
     })
@@ -27,5 +27,12 @@ public interface UserMapper {
     @Select("SELECT url.url  FROM url  WHERE EXISTS (SELECT 1 FROM userrole WHERE userrole.roleId = url.roleId AND EXISTS (SELECT 1 FROM user WHERE user.roleId = userrole.roleId AND user.phone = #{phone}))")
     Set<String> getPermissions(String phone);
 
+    @Update("update user set password = #{newPassword} where phone = #{phone}")
+    Integer UpdatePassword(String newPassword,String phone);
 
+    @Update("update user set username = #{username} where phone = #{phone}")
+    Integer UpdateInfo(String username,String phone);
+
+    @Update("update user set roleId = #{roleId} where phone = #{phone}")
+    Integer UpdatePermission(Integer roleId,String phone);
 }

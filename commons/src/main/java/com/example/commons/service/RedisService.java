@@ -1,5 +1,6 @@
-package com.example.commons;
+package com.example.commons.service;
 
+import com.example.commons.config.Constants;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +26,9 @@ public class RedisService {
      * @param sessionId 会话id
      */
     public void storeToken(String token, String sessionId) {
-        redisTemplate.opsForValue().set("sessionid",sessionId);
-        redisTemplate.opsForHash().put(token, "sessionid", sessionId);
-        redisTemplate.opsForHash().put(token, "counter", 0);
+        redisTemplate.opsForValue().set(Constants.SESSION_KEY,sessionId);
+        redisTemplate.opsForHash().put(token, Constants.SESSION_KEY, sessionId);
+        redisTemplate.opsForHash().put(token, Constants.COUNTER_KEY, 0);
         redisTemplate.expire(token, 15, TimeUnit.MINUTES);
     }
 
@@ -36,16 +37,16 @@ public class RedisService {
      * @param token
      */
     public void incrementCounter(String token) {
-        Integer count = (Integer) redisTemplate.opsForHash().get(token, "counter");
-        redisTemplate.opsForHash().put(token, "counter", ++count);
+        Integer count = (Integer) redisTemplate.opsForHash().get(token, Constants.COUNTER_KEY);
+        redisTemplate.opsForHash().put(token, Constants.COUNTER_KEY, ++count);
     }
 
     public Integer getCounter(String token) {
-        return (Integer) redisTemplate.opsForHash().get(token, "counter");
+        return (Integer) redisTemplate.opsForHash().get(token, Constants.COUNTER_KEY);
     }
 
     public String getSessionId(String token) {
-        return (String) redisTemplate.opsForHash().get(token, "sessionid");
+        return (String) redisTemplate.opsForHash().get(token, Constants.SESSION_KEY);
     }
 
     /**
@@ -53,7 +54,7 @@ public class RedisService {
      * @param phone 用户唯一标识符电话
      */
     public void storeStatus(String phone){
-        redisTemplate.opsForHash().put(phone,"status",true);
+        redisTemplate.opsForHash().put(phone,Constants.STATUS_KEY,true);
         redisTemplate.expire(phone, 15, TimeUnit.MINUTES);
     }
 
@@ -64,7 +65,7 @@ public class RedisService {
      */
     public Boolean getStatus(String phone){
         Boolean status;
-        return (status=(Boolean) redisTemplate.opsForHash().get(phone,"status"))==null?false:status;
+        return (status=(Boolean) redisTemplate.opsForHash().get(phone,Constants.STATUS_KEY))==null?false:status;
     }
 
     /**
@@ -72,7 +73,7 @@ public class RedisService {
      * @param phone 用户唯一标识符，电话号码
      */
     public void inCreTryNumbers(String phone){
-       redisTemplate.opsForHash().increment(phone,"numbers",1);
+       redisTemplate.opsForHash().increment(phone,Constants.NUMBER_KEY,1);
     }
 
     /**
@@ -81,12 +82,24 @@ public class RedisService {
      */
     public Integer getTryNumbers(String phone){
         Integer number;
-        number = (Integer) redisTemplate.opsForHash().get(phone,"numbers");
+        number = (Integer) redisTemplate.opsForHash().get(phone,Constants.NUMBER_KEY);
         if(number==null){
-            redisTemplate.opsForHash().put(phone,"number",0);
+            redisTemplate.opsForHash().put(phone,Constants.NUMBER_KEY,0);
             redisTemplate.expire(phone, 15, TimeUnit.MINUTES);
             number=0;
         }
         return number;
+    }
+
+    /**
+     * 清理登录时缓存的数据。
+     * @param token 登录令牌
+     * @param phone 用户电话
+     */
+    public void clearLogin(String token,String phone){
+        redisTemplate.opsForHash().delete(token,Constants.COUNTER_KEY);
+        redisTemplate.opsForHash().delete(token,Constants.SESSION_KEY);
+        redisTemplate.opsForHash().delete(phone,Constants.NUMBER_KEY);
+        redisTemplate.opsForHash().delete(phone,Constants.STATUS_KEY);
     }
 }
