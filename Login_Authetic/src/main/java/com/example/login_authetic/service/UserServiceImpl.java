@@ -1,5 +1,7 @@
 package com.example.login_authetic.service;
 
+import com.example.commons.config.Constants;
+import com.example.commons.service.RedisIdWorker;
 import com.example.commons.service.RedisService;
 import com.example.commons.exceptiondeal.BusinessErrorException;
 import com.example.commons.exceptiondeal.BusinessMsgEnum;
@@ -9,6 +11,7 @@ import com.example.login_authetic.entity.User;
 import com.example.login_authetic.entity.UserInfo;
 import com.example.login_authetic.entity.UserRole;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,9 @@ public class UserServiceImpl implements UserService{
 
     @Resource
     private UserMapper userMapper;
+
+    @Resource
+    private RedisIdWorker redisIdWorker;
 
     @Resource
     private RedisService redisService;
@@ -37,26 +43,31 @@ public class UserServiceImpl implements UserService{
     public User login(User input) {
         User user;
         String phone = input.getPhone();
-//        用户是否已经登录
-        if(redisService.getStatus(phone)){
-            throw new BusinessErrorException(BusinessMsgEnum.USER_HAS_LOGIN);
-        }
-//        初始化密码尝试次数
-        if(redisService.getTryNumbers(phone)>5){
-            throw new BusinessErrorException(BusinessMsgEnum.TRY_MUCH_NUMBERS);
-        }
         if((user=userMapper.getUserByPhone(phone))==null){
             throw new BusinessErrorException(BusinessMsgEnum.USER_NOT_EXISTED);
         }
+        Long userId = user.getUserId();
+//        用户是否已经登录
+        if(redisService.getStatus(userId)){
+            throw new BusinessErrorException(BusinessMsgEnum.USER_HAS_LOGIN);
+        }
+//        初始化密码尝试次数
+        if(redisService.getTryNumbers(userId)>5){
+            throw new BusinessErrorException(BusinessMsgEnum.TRY_MUCH_NUMBERS);
+        }
+
         if(!passwordEncoder.matches(input.getPassword(),user.getPassword())){
             //记录密码输错的次数
-            redisService.inCreTryNumbers(phone);
+            redisService.inCreTryNumbers(userId);
             throw new BusinessErrorException(BusinessMsgEnum.PASSWORD_WRONG_EXISTED);
         }
 //        密码尽量不传输
         user.setPassword(null);
         return user;
     }
+
+
+
 
     /**
      * 判断电话号码是否被注册，插入用户数据到数据库
@@ -65,11 +76,12 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void register(User input) {
+        input.setUserId(redisIdWorker.nextId(Constants.PREFIX_USER));
         if(userMapper.getUserByPhone(input.getPhone())!=null){
             throw new BusinessErrorException(BusinessMsgEnum.USER_IS_EXISTED);
         }
         input.setPassword(passwordEncoder.encode(input.getPassword()));
-        if(userMapper.insertUser(input.getPhone(),input.getUsername(),input.getPassword())==0){
+        if(userMapper.insertUser(input.getUserId(),input.getPhone(),input.getUsername(),input.getPassword())==0){
             throw new BusinessErrorException(BusinessMsgEnum.UNEXPECTED_EXCEPTION);
         }
 
@@ -82,12 +94,12 @@ public class UserServiceImpl implements UserService{
 
     /**
      * 获取用户权限
-     * @param phone 用户手机号
+     * @param userId 用户唯一标识符
      * @return 返回权限集合
      */
     @Override
-    public Set<String> getPermissions(String phone) {
-        return userMapper.getPermissions(phone);
+    public Set<String> getPermissions(Long userId) {
+        return userMapper.getPermissions(userId);
     }
 
     @Override
@@ -114,12 +126,12 @@ public class UserServiceImpl implements UserService{
      * 修改密码，需要之前的密码作为验证
      * @param newPassword 新的密码
      * @param oldPassword 旧密码
-     * @param phone 电话可以从会话直接取
+     * @param userId 用户唯一标识符
      */
     @Override
-    public void changePassword(String newPassword, String oldPassword,String phone) {
+    public void changePassword(String newPassword, String oldPassword,Long userId) {
         User user;
-        if((user=userMapper.getUserByPhone(phone))==null){
+        if((user=userMapper.getUserByUseId(userId))==null){
             throw new BusinessErrorException(BusinessMsgEnum.USER_NOT_EXISTED);
         }
         if(!passwordEncoder.matches(oldPassword,user.getPassword())){
@@ -127,21 +139,21 @@ public class UserServiceImpl implements UserService{
         }
 //        密码尽量不传输
         user.setPassword(null);
-        if(userMapper.UpdatePassword(passwordEncoder.encode(newPassword),phone)==0){
+        if(userMapper.UpdatePassword(passwordEncoder.encode(newPassword),userId)==0){
             throw new BusinessErrorException(BusinessMsgEnum.UNEXPECTED_EXCEPTION);
         }
     }
 
     @Override
-    public void changeInfo(UserInfo userInfo, String phone) {
-        if(userMapper.UpdateInfo(userInfo.getUsername(),phone)==0){
+    public void changeInfo(UserInfo userInfo,Long userId) {
+        if(userMapper.UpdateInfo(userInfo,userId)==0){
             throw new BusinessErrorException(BusinessMsgEnum.DATA_INSERT_EXCEPTION);
         }
     }
 
     @Override
-    public void changePermission(String phone, Integer roleId) {
-        if(userMapper.UpdatePermission(roleId,phone)==0){
+    public void changePermission(Long userId, Integer roleId) {
+        if(userMapper.UpdatePermission(roleId,userId)==0){
             throw new BusinessErrorException(BusinessMsgEnum.DATA_INSERT_EXCEPTION);
         }
     }
@@ -151,7 +163,7 @@ public class UserServiceImpl implements UserService{
      * 删除token主键和phone主键的数据
      */
     @Override
-    public void releaseRedis(String token,String phone) {
-        redisService.clearLogin(token,phone);
+    public void releaseRedis(String token,Long userId) {
+        redisService.clearLogin(token,userId);
     }
 }

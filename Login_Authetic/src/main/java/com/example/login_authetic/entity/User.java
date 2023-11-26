@@ -3,6 +3,7 @@ package com.example.login_authetic.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Convert;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,6 +35,12 @@ public class User {
     @Size(max = 20,message = "密码不能超过20个字符")
     private String password;
 
+    private Long userId;
+
+    private Integer roleId = 2;
+
+
+
     public Integer getRoleId() {
         return roleId;
     }
@@ -43,10 +50,15 @@ public class User {
     }
 
 
-    private Integer roleId;
-    /* 省略get、set和带参构造方法 */
 
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     public String getPhone() {
         return phone;

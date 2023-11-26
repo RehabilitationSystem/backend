@@ -15,7 +15,7 @@ public interface UserService {
 
     Set<String> getRoles(String username);
 
-    Set<String> getPermissions(String phone);
+    Set<String> getPermissions(Long userId);
 
     User getByPhone(String phone);
 
@@ -23,11 +23,11 @@ public interface UserService {
 
      void insertRole(UserRole role);
 
-     void changePassword(String newPassword,String oldPassword,String phone);
+     void changePassword(String newPassword,String oldPassword,Long userId);
 
-    void changeInfo(UserInfo userInfo, String phone);
+    void changeInfo(UserInfo userInfo, Long userId);
 
-    void changePermission(String phone,Integer roleId);
+    void changePermission(Long userId,Integer roleId);
 
-    void releaseRedis(String token,String phone);
+    void releaseRedis(String token,Long userId);
 }

@@ -1,6 +1,8 @@
 package com.example.login_authetic.dao;
 
 import com.example.login_authetic.entity.User;
+import com.example.login_authetic.entity.UserGender;
+import com.example.login_authetic.entity.UserInfo;
 import org.apache.ibatis.annotations.*;
 
 import java.util.Set;
@@ -11,12 +13,22 @@ public interface UserMapper {
     @Results({
             @Result(property = "username", column = "username"),
             @Result(property = "password", column = "password"),
-            @Result(property = "phone", column = "phone")
+            @Result(property = "phone", column = "phone"),
+            @Result(property = "userId", column = "userId")
     })
     User getUserByPhone(String phone);
 
-    @Insert("insert into user(phone,username,password) value(#{phone},#{username},#{password})")
-    Integer insertUser(String phone,String username,String password);
+    @Select("select * from user where  userId = #{userId}")
+    @Results({
+            @Result(property = "username", column = "username"),
+            @Result(property = "password", column = "password"),
+            @Result(property = "phone", column = "phone"),
+            @Result(property = "userId", column = "userId")
+    })
+    User getUserByUseId(Long useId);
+
+    @Insert("insert into user(userId,phone,username,password) value(#{userId},#{phone},#{username},#{password})")
+    Integer insertUser(Long userId,String phone,String username,String password);
 
     @Insert("insert into url(url,roleId) value(#{url},#{roleId})")
     Integer insertUrl(String url,Integer roleId);
@@ -24,15 +36,15 @@ public interface UserMapper {
     @Insert("insert into userrole(roleId,role) value(#{roleId},#{role})")
     Integer insertRole(Integer roleId,String role);
 
-    @Select("SELECT url.url  FROM url  WHERE EXISTS (SELECT 1 FROM userrole WHERE userrole.roleId = url.roleId AND EXISTS (SELECT 1 FROM user WHERE user.roleId = userrole.roleId AND user.phone = #{phone}))")
-    Set<String> getPermissions(String phone);
+    @Select("SELECT url.url  FROM url  WHERE EXISTS (SELECT 1 FROM userrole WHERE userrole.roleId = url.roleId AND EXISTS (SELECT 1 FROM user WHERE user.roleId = userrole.roleId AND user.userId = #{userId}))")
+    Set<String> getPermissions(Long userId);
 
-    @Update("update user set password = #{newPassword} where phone = #{phone}")
-    Integer UpdatePassword(String newPassword,String phone);
+    @Update("update user set password = #{newPassword} where userId = #{userId}")
+    Integer UpdatePassword(String newPassword,Long userId);
 
-    @Update("update user set username = #{username} where phone = #{phone}")
-    Integer UpdateInfo(String username,String phone);
+    @UpdateProvider(type = UserUpdateProvider.class, method = "updateModel")
+    Integer UpdateInfo(UserInfo userInfo,Long userId);
 
-    @Update("update user set roleId = #{roleId} where phone = #{phone}")
-    Integer UpdatePermission(Integer roleId,String phone);
+    @Update("update user set roleId = #{roleId} where userId = #{userId}")
+    Integer UpdatePermission(Integer roleId,Long userId);
 }

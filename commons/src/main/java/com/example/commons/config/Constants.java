@@ -13,7 +13,9 @@ public final class Constants {
 
     public static final String SUCCESS_CODE = "200";
 
-//    登录相关的阈值
+//    登录相关的常量
+    public static final String PREFIX_USER="user";
+
     public static final Integer WRONG_PASSWORD = 5;
 
     public static final Integer LOGIN_TIMES = 30;
