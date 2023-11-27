@@ -33,6 +33,17 @@ public class User {
     @Size(min = 8,message = "密码不能少于8个字符")
     @Size(max = 20,message = "密码不能超过20个字符")
     private String password;
+
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
+    }
+
+
+    private Integer roleId;
     /* 省略get、set和带参构造方法 */
 
 
