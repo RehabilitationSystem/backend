@@ -33,6 +33,12 @@ public class JsonResult<T> {
         this.msg = "操作成功！";
     }
 
+    public JsonResult(T data, String code, String msg) {
+        this.data = data;
+        this.code = code;
+        this.msg = msg;
+    }
+
     /**
      * 有数据返回，状态码为0，人为指定提示信息
      * @param data
