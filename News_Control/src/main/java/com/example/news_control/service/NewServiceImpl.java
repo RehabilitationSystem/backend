@@ -11,7 +11,18 @@ public class NewServiceImpl implements NewsService{
     @Autowired
     private NewsMapper newMapper;
     @Override
-    public News getNews(int new_id) {
-        return newMapper.getNewsById(new_id);
+    public News getNewsDetail(int new_id) {
+        return newMapper.getNewsDetail(new_id);
     }
+
+    @Override
+    public int publishNews(News news) {
+        return newMapper.publishNews(news);
+    }
+
+    @Override
+    public int updateNews(News news) {
+        return newMapper.updateNews(news);
+    }
+
 }

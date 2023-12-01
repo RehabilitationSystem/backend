@@ -14,6 +14,13 @@ public interface NewsMapper {
             @Result(property = "publish_id", column = "publish_id"),
             @Result(property = "editor_id", column = "editor_id")
     })
-    News getNewsById(int new_id);
+    News getNewsDetail(int new_id);
+    @Insert("INSERT INTO news(title,content,create_time,publish_id,editor_id) " +
+            "VALUES(#{title},#{content},#{create_time},#{publish_id},#{editor_id})")
+    int publishNews(News news);
+    @Update("UPDATE news " +
+            "SET title = #{title},content = #{content} " +
+            "WHERE new_id = #{new_id}")
+    int updateNews(News news);
 
 }
