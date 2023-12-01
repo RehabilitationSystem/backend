@@ -1,14 +1,18 @@
 package com.example.login_authetic.entity;
 
 
+import com.example.commons.config.Constants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.yaml.snakeyaml.scanner.Constant;
 
 
 import java.util.List;
@@ -37,8 +41,52 @@ public class User {
 
     private Long userId;
 
-    private Integer roleId = 2;
+    private Integer roleId = Constants.INITIAL_ROLE;
 
+//    @Convert(converter = UserGender.Convert.class)
+//    private UserGender gender = UserGender.UNKNOWN;
+    private Integer gender = 3;
+
+
+    private Byte age = Constants.INITIAL_AGE;
+
+    @Size(min = 0,max = 255,message = "介绍不得为空，或者长度太长")
+    private String introduce= Constants.INITIAL_INTRODUCE;
+
+
+
+//    public UserGender getGender() {
+//        return gender;
+//    }
+//
+//    public void setGender(UserGender gender) {
+//        this.gender = gender;
+//    }
+
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public Byte getAge() {
+        return age;
+    }
+
+    public void setAge(Byte age) {
+        this.age = age;
+    }
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
+    }
 
 
     public Integer getRoleId() {

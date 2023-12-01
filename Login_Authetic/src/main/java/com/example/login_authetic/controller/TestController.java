@@ -1,9 +1,5 @@
 package com.example.login_authetic.controller;
 
-import com.example.login_authetic.entity.User;
-import com.example.login_authetic.service.UserService;
-import jakarta.annotation.Resource;
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

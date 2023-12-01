@@ -27,8 +27,8 @@ public interface UserMapper {
     })
     User getUserByUseId(Long useId);
 
-    @Insert("insert into user(userId,phone,username,password) value(#{userId},#{phone},#{username},#{password})")
-    Integer insertUser(Long userId,String phone,String username,String password);
+    @Insert("insert into user(userId,phone,username,password,roleId,age,introduce,gender) value(#{userId},#{phone},#{username},#{password},#{roleId},#{age},#{introduce},#{gender})")
+    Integer insertUser(User user);
 
     @Insert("insert into url(url,roleId) value(#{url},#{roleId})")
     Integer insertUrl(String url,Integer roleId);
@@ -42,8 +42,9 @@ public interface UserMapper {
     @Update("update user set password = #{newPassword} where userId = #{userId}")
     Integer UpdatePassword(String newPassword,Long userId);
 
-    @UpdateProvider(type = UserUpdateProvider.class, method = "updateModel")
-    Integer UpdateInfo(UserInfo userInfo,Long userId);
+    @UpdateProvider(type = UserProvider.class, method = "updateModel")
+    Integer UpdateInfo(User user);
+
 
     @Update("update user set roleId = #{roleId} where userId = #{userId}")
     Integer UpdatePermission(Integer roleId,Long userId);

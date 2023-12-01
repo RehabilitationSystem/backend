@@ -25,7 +25,7 @@ public interface UserService {
 
      void changePassword(String newPassword,String oldPassword,Long userId);
 
-    void changeInfo(UserInfo userInfo, Long userId);
+    void changeInfo(User user);
 
     void changePermission(Long userId,Integer roleId);
 

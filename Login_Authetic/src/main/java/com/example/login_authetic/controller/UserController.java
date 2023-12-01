@@ -83,9 +83,10 @@ class UserController {
     }
 
     @PatchMapping("/1.0/")
-    public JsonResult<String> changeInfo(HttpSession session,@RequestBody @Validated UserInfo userInfo){
+    public JsonResult<String> changeInfo(HttpSession session,@RequestBody @Validated User user){
         User login = (User) session.getAttribute("login");
-        userService.changeInfo(userInfo,login.getUserId());
+        user.setUserId(login.getUserId());
+        userService.changeInfo(user);
         return new JsonResult(Constants.SUCCESS_CODE,"修改用户信息成功！");
     }
 

@@ -6,12 +6,8 @@ import com.example.commons.service.RedisService;
 import com.example.commons.exceptiondeal.BusinessErrorException;
 import com.example.commons.exceptiondeal.BusinessMsgEnum;
 import com.example.login_authetic.dao.UserMapper;
-import com.example.login_authetic.entity.Url;
-import com.example.login_authetic.entity.User;
-import com.example.login_authetic.entity.UserInfo;
-import com.example.login_authetic.entity.UserRole;
+import com.example.login_authetic.entity.*;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -76,15 +72,15 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void register(User input) {
+//        用户初始化个人信息
         input.setUserId(redisIdWorker.nextId(Constants.PREFIX_USER));
         if(userMapper.getUserByPhone(input.getPhone())!=null){
             throw new BusinessErrorException(BusinessMsgEnum.USER_IS_EXISTED);
         }
         input.setPassword(passwordEncoder.encode(input.getPassword()));
-        if(userMapper.insertUser(input.getUserId(),input.getPhone(),input.getUsername(),input.getPassword())==0){
+        if(userMapper.insertUser(input)==0){
             throw new BusinessErrorException(BusinessMsgEnum.UNEXPECTED_EXCEPTION);
         }
-
     }
 
     @Override
@@ -145,8 +141,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void changeInfo(UserInfo userInfo,Long userId) {
-        if(userMapper.UpdateInfo(userInfo,userId)==0){
+    public void changeInfo(User user) {
+        if(userMapper.UpdateInfo(user)==0){
             throw new BusinessErrorException(BusinessMsgEnum.DATA_INSERT_EXCEPTION);
         }
     }

@@ -1,5 +1,6 @@
 package com.example.login_authetic.entity;
 
+import com.example.commons.config.Constants;
 import jakarta.persistence.Convert;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -19,9 +20,11 @@ public class UserInfo {
     @Convert(converter = UserGender.Convert.class)
     private UserGender gender = UserGender.UNKNOWN;
 
-    private Byte age = 0;
+    private Byte age = Constants.INITIAL_AGE;
     @Size(min = 0,max = 255,message = "介绍不得为空，或者长度太长")
-    private String introduce = "您还没设置简介哦";
+    private String introduce= Constants.INITIAL_INTRODUCE;
+
+
 
     public UserGender getGender() {
         return gender;

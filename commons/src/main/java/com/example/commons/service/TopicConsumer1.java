@@ -14,7 +14,7 @@ public class TopicConsumer1 {
      * 接收订阅消息
      * @param msg
      */
-    @JmsListener(destination = ActiveMqConfig.TOPIC_NAME, containerFactory = "topicListenerContainer")
+    @JmsListener(destination = ActiveMqConfig.TOPIC_NAME, containerFactory = "topicListener")
     public void receiveTopicMsg(String msg) {
         System.out.println("收到的消息为：" + msg);
     }

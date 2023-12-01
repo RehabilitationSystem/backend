@@ -4,6 +4,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.commons.config.JsonResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
@@ -121,10 +122,21 @@ public class GlobalExceptionHandler {
         return new JsonResult("405", message);
     }
 
+    /**
+     *  redis服务器连接异常
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(RedisConnectionFailureException.class)
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    public JsonResult handleUnexpectedServer(RedisConnectionFailureException ex) {
+        logger.error("redis服务连接异常异常：", ex);
+        return new JsonResult("500", "系统发生异常，请联系管理员");
+    }
 
 
     /**
-     * 系统异常 预期以外异常
+     *系统异常 预期以外异常
      * @param ex
      * @return
      */
@@ -134,6 +146,8 @@ public class GlobalExceptionHandler {
         logger.error("系统异常：", ex);
         return new JsonResult("500", "系统发生异常，请联系管理员");
     }
+
+
 
 
 }
