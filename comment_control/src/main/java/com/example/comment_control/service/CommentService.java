@@ -1,4 +1,13 @@
 package com.example.comment_control.service;
 
-interface CommentService {
+
+
+import com.example.comment_control.entity.Comment;
+
+import java.util.List;
+
+public interface CommentService {
+    void addComment(Comment comment);
+    List<Comment> listAll();
+    Comment findById(String id);
 }
