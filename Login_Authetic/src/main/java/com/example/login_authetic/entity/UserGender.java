@@ -41,13 +41,13 @@ public enum UserGender {
     }
 
     public static class Convert implements AttributeConverter<UserGender, Integer> {
-//       在写入数据库时，jpa会调用convert的convertToDatabaseColumn方法
+//       在写入数据库时调用
         @Override
         public Integer convertToDatabaseColumn(UserGender attribute) {
             return attribute == null ? null : attribute.getValue();
         }
 
-//      在反向查询时，通过数据库的值和遍历的枚举的value进行比较，然后返回UserAction实体
+//      在查询数据库时
         @Override
         public UserGender convertToEntityAttribute(Integer dbData) {
             for (UserGender type : UserGender.values()) { //将数字转换为描述

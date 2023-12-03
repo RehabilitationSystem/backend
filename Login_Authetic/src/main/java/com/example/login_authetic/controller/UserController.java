@@ -6,10 +6,14 @@ import com.example.commons.config.JsonResult;
 import com.example.login_authetic.entity.*;
 import com.example.commons.annotation.UnInterception;
 import com.example.commons.service.RedisService;
+import com.example.login_authetic.entity.groupRule.InfoGroup;
+import com.example.login_authetic.entity.groupRule.LoginGroup;
+import com.example.login_authetic.entity.groupRule.RegisterGroup;
 import com.example.login_authetic.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.groups.Default;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
+import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping("/user")
@@ -24,9 +29,6 @@ class UserController {
 
     @Resource
     private UserService userService;
-
-    @Resource
-    private RedisService redisService;
 
     private final static Logger logger = LoggerFactory.getLogger(TestController.class);
 
@@ -37,21 +39,25 @@ class UserController {
     }
 
 
+    @SneakyThrows
     @PostMapping("/1.0/login")
     @Transactional(rollbackFor = Exception.class)
     @UnInterception
     public JsonResult<String> Login(@RequestBody @Validated({LoginGroup.class, Default.class}) User user, HttpSession httpSession){
-        String phone = user.getPhone();
         User login = userService.login(user);
         Long userId = login.getUserId();
-        String sign = JwtUtil.sign(phone, null);
-        redisService.storeToken(sign,httpSession.getId());
-        Set<String> permissions = userService.getPermissions(userId);
-        //数据存到会话里
-        httpSession.setAttribute("permissions",permissions);
         httpSession.setAttribute("login",login);
-        //redis存储用户登录的状态
-        redisService.storeStatus(userId);
+
+        //启动redis服务,存储登录数据
+
+        Future<String> stringFuture = userService.loginDataRedis(httpSession, userId);
+
+        //数据存到会话里
+        Set<String> permissions = userService.getPermissions(userId);
+        httpSession.setAttribute("permissions",permissions);
+
+        String sign = stringFuture.get();
+
         return new JsonResult<>(sign,Constants.SUCCESS_CODE,"登录成功！");
     }
 
@@ -83,7 +89,7 @@ class UserController {
     }
 
     @PatchMapping("/1.0/")
-    public JsonResult<String> changeInfo(HttpSession session,@RequestBody @Validated User user){
+    public JsonResult<String> changeInfo(HttpSession session,@RequestBody @Validated({InfoGroup.class,Default.class}) User user){
         User login = (User) session.getAttribute("login");
         user.setUserId(login.getUserId());
         userService.changeInfo(user);

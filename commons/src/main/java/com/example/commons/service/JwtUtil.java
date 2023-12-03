@@ -26,13 +26,14 @@ public class JwtUtil {
      * @param info,Map的value只能存放值的类型为：Map，List，Boolean，Integer，Long，Double，String and Date
      * @return
      * */
-    public static String sign(String userId, Map<String, Object> info) {
+    public static String sign(Long userId, Map<String, Object> info) {
+        String storeId = Long.toString(userId);
         try {
             Date date = new Date(System.currentTimeMillis() + EXPIRE_TIME);
             Algorithm algorithm = Algorithm.HMAC256(SECRET);
             return JWT.create()
                     //将userId保存到token里面
-                    .withAudience(userId)
+                    .withAudience(storeId)
                     //存放自定义数据
                     .withClaim("info", info)
                     //五分钟后token过期

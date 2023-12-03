@@ -16,11 +16,15 @@ public final class Constants {
 //    实体类的列名
      public static final String USERNAME="username";
 
+    public static final String PHONE="phone";
+
     public static final String AGE="age";
 
     public static final String GENDER = "gender";
 //    登录相关的常量
     public static final String PREFIX_USER="user";
+
+    public static final String PREFIX_COUNTER="counter";
 
     public static final Integer WRONG_PASSWORD = 5;
 

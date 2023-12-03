@@ -2,15 +2,26 @@ package com.example.commons.service;
 
 import com.example.commons.config.Constants;
 import jakarta.annotation.Resource;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.connection.RedisStringCommands;
+import org.springframework.data.redis.connection.ReturnType;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 
+import org.springframework.data.redis.core.types.Expiration;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 @Service
+@Slf4j
 public class RedisService {
 
     private final static Logger logger = LoggerFactory.getLogger(RedisService.class);
@@ -20,15 +31,23 @@ public class RedisService {
 
 
 
+    //设置默认尝试等待时间
+    private final static int DEFAULT_LOCK_REGISTRY_TIME = 500;
+
+    //尝试次数
+    private final static int DEFAULT_LOCK_REGISTRY_NUMBERS = 3;
+    //自定义lock key前缀
+    private final static String LOCK_PREFIX = "LOCK:CUSTOMER_BALANCE";
+
     /**
      * 保存会话id，并初始化序列计数器
      * @param token
      * @param sessionId 会话id
      */
-    public void storeToken(String token, String sessionId) {
+    public void storeToken(String token, String sessionId,Long value) {
         redisTemplate.opsForValue().set(Constants.SESSION_KEY,sessionId);
         redisTemplate.opsForHash().put(token, Constants.SESSION_KEY, sessionId);
-        redisTemplate.opsForHash().put(token, Constants.COUNTER_KEY, 0);
+        redisTemplate.opsForHash().put(token, Constants.COUNTER_KEY, value);
         redisTemplate.expire(token, 15, TimeUnit.MINUTES);
     }
 
@@ -73,6 +92,8 @@ public class RedisService {
      * 原子增加密码输入错误的次数
      * @param userId 用户唯一标识符
      */
+    @Async
+    @SneakyThrows
     public void inCreTryNumbers(Long userId){
        redisTemplate.opsForHash().increment(String.valueOf(userId),Constants.NUMBER_KEY,1);
     }
@@ -105,4 +126,44 @@ public class RedisService {
         redisTemplate.opsForHash().delete(key,Constants.NUMBER_KEY);
         redisTemplate.opsForHash().delete(key,Constants.STATUS_KEY);
     }
+
+    public RedisDistributedLock getLock(RedisTemplate<String, Object> redisTemplate,String lockKey, String lockValue) {
+        return new RedisDistributedLock(redisTemplate, lockKey, lockValue);
+    }
+
+
+
+//    public <T> T callWithLock(Long userId,Callable<T> callable) throws Exception{
+//        //自定义lock key
+//        String lockKey = "user"+userId;
+//        //将UUID当做value，确保唯一性
+//        String lockReference = UUID.randomUUID().toString();
+//        RedisDistributedLock lock = getLock(redisTemplate, lockKey, lockReference);
+//        try {
+//            if (!lock.lockWithRetry(DEFAULT_LOCK_REGISTRY_NUMBERS,DEFAULT_LOCK_REGISTRY_TIME)) {
+//                throw new Exception("lock加锁失败");
+//            }
+//            return callable.call();
+//        } finally {
+//            lock.unlockWithRetry(DEFAULT_LOCK_REGISTRY_NUMBERS,DEFAULT_LOCK_REGISTRY_TIME);
+//        }
+//    }
+
+    @SneakyThrows
+    public <T> void callWithLock(T lockKey,Callable callable) {
+        //自定义lock key
+        String string = lockKey.toString();
+        //将UUID当做value，确保唯一性
+        String lockReference = UUID.randomUUID().toString();
+        RedisDistributedLock lock = getLock(redisTemplate, string, lockReference);
+        try {
+            if (!lock.lockWithRetry(DEFAULT_LOCK_REGISTRY_NUMBERS,DEFAULT_LOCK_REGISTRY_TIME)) {
+                throw new Exception("lock加锁失败");
+            }
+            callable.call();
+        } finally {
+            lock.unlockWithRetry(DEFAULT_LOCK_REGISTRY_NUMBERS,DEFAULT_LOCK_REGISTRY_TIME);
+        }
+    }
+
 }

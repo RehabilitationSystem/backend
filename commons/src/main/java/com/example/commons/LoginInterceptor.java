@@ -41,62 +41,93 @@ public class LoginInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
-
-        String requestURI = request.getRequestURI();
-
         // 通过方法，可以获取该方法上的自定义注解，然后通过注解来判断该方法是否要被拦截
-        // @UnInterception 是我们自定义的注解
         UnInterception unInterception = method.getAnnotation(UnInterception.class);
         if (null != unInterception) {
             return true;
         }
 
-
+        //支持多种获取的方式
         String token = request.getParameter("token");
-        //String authorizationHeader = request.getHeader("Authorization");
-        //String token = authorizationHeader.replace("Bearer ", "");
+        if(token==null){
+            String authorizationHeader = request.getHeader("Authorization");
+            token = authorizationHeader.replace("Bearer ", "");
+        }
 
+        //token本身
+        HttpSession session = request.getSession();
+        checkToken(token,session);
 
+        //序列计数
+        Integer counter =  Integer.parseInt(request.getParameter("counter"));
+        //测试用值
+        //Integer counter =2;
+        checkCounter(counter,token);
+
+        //权限
+        String requestURI = request.getRequestURI();
+        Set<String> urlSet= (Set<String>)session.getAttribute("permissions");
+        checkUrl(urlSet,requestURI);
+        return true;
+    }
+
+    /**
+     * 检验用户是否有uri权限
+     * @param urlSet 允许uri权限集合
+     * @param requestURI 请求访问的uri
+     */
+    private void checkUrl(Set<String> urlSet,String requestURI){
+        try {
+            if(!checkPermissions(urlSet,requestURI)){
+                throw new BusinessErrorException(BusinessMsgEnum.HAS_NOT_PERMISSIONS);
+            }
+        } catch (NullPointerException e) {
+            logger.info("uriSet没有进行初始化!");
+            throw new BusinessErrorException(BusinessMsgEnum.URI_SET_NULL);
+        }
+    }
+
+    /**
+     * 检查token本身的内容,token是否携带,是否合法,sessionId是否对的上.
+     * @param token
+     * @param session
+     */
+    private void checkToken(String token,HttpSession session){
         if (null == token || "".equals(token)) {
             logger.info("用户未登录，没有权限执行……请登录");
             throw new BusinessErrorException(BusinessMsgEnum.TOKEN_NOT_USED);
         }
-
         //验证token是否合法
         JwtUtil.checkSign(token);
+        String sessionId = redisService.getSessionId(token);
+        if(!sessionId.equals(session.getId())){
+            throw new BusinessErrorException(BusinessMsgEnum.TOKEN_STOLEN);
+        }
 
+    }
 
-        //验证token是否重放或者过期
+    /**
+     * 检查计数器部分,单独设置是为了方便进行同步处理.
+     * @param counter 请求提供的计数器的值
+     * @param token 用户验证令牌
+     */
+    private void checkCounter(Integer counter,String token){
+        //序列计数器是否还缓存在redis里
         Integer count = redisService.getCounter(token);
         if(count==null){
             throw new BusinessErrorException(BusinessMsgEnum.TOKEN_HAS_EXPIRED);
         }
-
-        redisService.incrementCounter(token);
-
-
-        //验证是否token盗用
-//        Integer counter =  Integer.parseInt(request.getParameter("counter"));
-        Integer counter =2;
-        String sessionId = redisService.getSessionId(token);
-        HttpSession session = request.getSession();
-        Set<String> urlSet= (Set<String>)session.getAttribute("permissions");
-//        if(!sessionId.equals(session.getId())){
-//            throw new BusinessErrorException(BusinessMsgEnum.TOKEN_STOLEN);
-//        }
-//        if(counter!=redisService.getCounter(token)){
-//            throw new BusinessErrorException(BusinessMsgEnum.TOKEN_SAME_COUNTER);
-//        }
-
-        if(!checkPermissions(urlSet,requestURI)){
-            throw new BusinessErrorException(BusinessMsgEnum.HAS_NOT_PERMISSIONS);
+        //序列计数器是否符和预期
+        if(counter!=count){
+            throw new BusinessErrorException(BusinessMsgEnum.TOKEN_SAME_COUNTER);
         }
-
-        return true;
+        //原子增加下一次期待的计数器的值
+        redisService.incrementCounter(token);
     }
+
+
 
     private Boolean checkPermissions(Set<String> urlSet,String requestURI){
         for (String allowedUrl : urlSet) {

@@ -1,6 +1,7 @@
 package com.example.login_authetic.service;
 
 import com.example.commons.config.Constants;
+import com.example.commons.service.JwtUtil;
 import com.example.commons.service.RedisIdWorker;
 import com.example.commons.service.RedisService;
 import com.example.commons.exceptiondeal.BusinessErrorException;
@@ -8,12 +9,18 @@ import com.example.commons.exceptiondeal.BusinessMsgEnum;
 import com.example.login_authetic.dao.UserMapper;
 import com.example.login_authetic.entity.*;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpSession;
+import lombok.SneakyThrows;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -44,13 +51,20 @@ public class UserServiceImpl implements UserService{
         }
         Long userId = user.getUserId();
 //        用户是否已经登录
-        if(redisService.getStatus(userId)){
-            throw new BusinessErrorException(BusinessMsgEnum.USER_HAS_LOGIN);
-        }
+
+        redisService.callWithLock(userId+Constants.PREFIX_USER, new Callable() {
+            @Override
+            public Object call(){
+                if(redisService.getStatus(userId)){
+                    throw new BusinessErrorException(BusinessMsgEnum.USER_HAS_LOGIN);
+                }
+                return null;
+            }
+        });
+
 //        初始化密码尝试次数
-        if(redisService.getTryNumbers(userId)>5){
-            throw new BusinessErrorException(BusinessMsgEnum.TRY_MUCH_NUMBERS);
-        }
+
+      checkTryNumbers(userId);
 
         if(!passwordEncoder.matches(input.getPassword(),user.getPassword())){
             //记录密码输错的次数
@@ -62,6 +76,26 @@ public class UserServiceImpl implements UserService{
         return user;
     }
 
+    @Async
+    @SneakyThrows
+    void checkTryNumbers(Long userId){
+        if(redisService.getTryNumbers(userId)>5){
+            throw new BusinessErrorException(BusinessMsgEnum.TRY_MUCH_NUMBERS);
+        }
+    }
+
+
+
+
+    @Async
+    @SneakyThrows
+    public Future<String> loginDataRedis(HttpSession httpSession, Long userId){
+        String sign = JwtUtil.sign(userId, null);
+        redisService.storeToken(sign,httpSession.getId(),redisIdWorker.nextId(Constants.PREFIX_COUNTER));
+        //redis存储用户登录的状态
+        redisService.storeStatus(userId);
+        return  CompletableFuture.completedFuture(sign);
+    }
 
 
 
@@ -72,15 +106,21 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void register(User input) {
-//        用户初始化个人信息
-        input.setUserId(redisIdWorker.nextId(Constants.PREFIX_USER));
-        if(userMapper.getUserByPhone(input.getPhone())!=null){
-            throw new BusinessErrorException(BusinessMsgEnum.USER_IS_EXISTED);
-        }
-        input.setPassword(passwordEncoder.encode(input.getPassword()));
-        if(userMapper.insertUser(input)==0){
-            throw new BusinessErrorException(BusinessMsgEnum.UNEXPECTED_EXCEPTION);
-        }
+        redisService.callWithLock(Constants.PHONE+input.getPhone(), new Callable() {
+            @Override
+            public Object call(){
+                //        用户初始化个人信息
+                input.setUserId(redisIdWorker.nextId(Constants.PREFIX_USER));
+                if(userMapper.getUserByPhone(input.getPhone())!=null){
+                    throw new BusinessErrorException(BusinessMsgEnum.USER_IS_EXISTED);
+                }
+                input.setPassword(passwordEncoder.encode(input.getPassword()));
+                if(userMapper.insertUser(input)==0){
+                    throw new BusinessErrorException(BusinessMsgEnum.UNEXPECTED_EXCEPTION);
+                }
+                return null;
+            }
+        });
     }
 
     @Override

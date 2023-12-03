@@ -5,8 +5,10 @@ import com.example.login_authetic.entity.User;
 import com.example.login_authetic.entity.Url;
 import com.example.login_authetic.entity.UserInfo;
 import com.example.login_authetic.entity.UserRole;
+import jakarta.servlet.http.HttpSession;
 
 import java.util.Set;
+import java.util.concurrent.Future;
 
 
 public interface UserService {
@@ -30,4 +32,6 @@ public interface UserService {
     void changePermission(Long userId,Integer roleId);
 
     void releaseRedis(String token,Long userId);
+
+    Future<String> loginDataRedis(HttpSession httpSession, Long userId);
 }
