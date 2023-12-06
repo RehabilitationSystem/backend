@@ -1,5 +1,6 @@
 package com.example.login_authetic.service;
 
+import com.example.commons.annotation.SonTransaction;
 import com.example.commons.config.Constants;
 import com.example.commons.service.JwtUtil;
 import com.example.commons.service.RedisIdWorker;
@@ -62,21 +63,19 @@ public class UserServiceImpl implements UserService{
             }
         });
 
-//        初始化密码尝试次数
-
-      checkTryNumbers(userId);
+        //初始化密码尝试次数
+        checkTryNumbers(userId);
 
         if(!passwordEncoder.matches(input.getPassword(),user.getPassword())){
             //记录密码输错的次数
             redisService.inCreTryNumbers(userId);
             throw new BusinessErrorException(BusinessMsgEnum.PASSWORD_WRONG_EXISTED);
         }
-//        密码尽量不传输
         user.setPassword(null);
         return user;
     }
 
-    @Async
+    @Transactional(rollbackFor = Exception.class)
     @SneakyThrows
     void checkTryNumbers(Long userId){
         if(redisService.getTryNumbers(userId)>5){
@@ -87,14 +86,12 @@ public class UserServiceImpl implements UserService{
 
 
 
-    @Async
-    @SneakyThrows
-    public Future<String> loginDataRedis(HttpSession httpSession, Long userId){
-        String sign = JwtUtil.sign(userId, null);
-        redisService.storeToken(sign,httpSession.getId(),redisIdWorker.nextId(Constants.PREFIX_COUNTER));
+    @Transactional(rollbackFor = Exception.class)
+    @Async("threadPoolTaskExecutor")
+    public void loginDataRedis(String sign,HttpSession httpSession, Long userId,Long counter){
+        redisService.storeToken(sign,httpSession.getId(),counter);
         //redis存储用户登录的状态
         redisService.storeStatus(userId);
-        return  CompletableFuture.completedFuture(sign);
     }
 
 

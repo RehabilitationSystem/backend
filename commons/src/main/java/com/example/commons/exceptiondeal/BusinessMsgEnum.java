@@ -25,6 +25,8 @@ public enum BusinessMsgEnum {
     TRY_MUCH_NUMBERS("400","密码输错已经达到上限，请十五分钟之后再试！"),
     USER_HAS_LOGIN("400","用户已经登录了！"),
     URI_SET_NULL("400","获取访问权限失败！"),
+    TOKEN_MISSING("400","TOKEN令牌没有被携带！"),
+    COUNTER_MISSING("400","序列号计数器counter没有被携带！"),
     TOKEN_NOT_USED("401","token令牌未被携带！");
     /**
      * 消息码

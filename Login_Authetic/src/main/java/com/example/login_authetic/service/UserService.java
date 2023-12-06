@@ -33,5 +33,5 @@ public interface UserService {
 
     void releaseRedis(String token,Long userId);
 
-    Future<String> loginDataRedis(HttpSession httpSession, Long userId);
+    void loginDataRedis(String sign,HttpSession httpSession, Long userId,Long counter);
 }

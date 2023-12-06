@@ -1,8 +1,10 @@
 package com.example.login_authetic.controller;
 
+import com.example.commons.annotation.MainTransaction;
 import com.example.commons.config.Constants;
 import com.example.commons.service.JwtUtil;
 import com.example.commons.config.JsonResult;
+import com.example.commons.service.RedisIdWorker;
 import com.example.login_authetic.entity.*;
 import com.example.commons.annotation.UnInterception;
 import com.example.commons.service.RedisService;
@@ -20,12 +22,18 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping("/user")
 class UserController {
+    @Resource
+    private RedisIdWorker redisIdWorker;
 
     @Resource
     private UserService userService;
@@ -49,16 +57,15 @@ class UserController {
         httpSession.setAttribute("login",login);
 
         //启动redis服务,存储登录数据
-
-        Future<String> stringFuture = userService.loginDataRedis(httpSession, userId);
+        String sign = JwtUtil.sign(userId, null);
+        Long counter = redisIdWorker.nextId(Constants.PREFIX_COUNTER);
+        userService.loginDataRedis(sign, httpSession, userId,counter);
 
         //数据存到会话里
         Set<String> permissions = userService.getPermissions(userId);
         httpSession.setAttribute("permissions",permissions);
 
-        String sign = stringFuture.get();
-
-        return new JsonResult<>(sign,Constants.SUCCESS_CODE,"登录成功！");
+        return new JsonResult(new ArrayList<>(Arrays.asList(sign,counter)),Constants.SUCCESS_CODE,"登录成功！");
     }
 
     @PostMapping("/1.0/register")

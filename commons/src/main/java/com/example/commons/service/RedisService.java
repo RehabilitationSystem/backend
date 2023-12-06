@@ -45,7 +45,6 @@ public class RedisService {
      * @param sessionId 会话id
      */
     public void storeToken(String token, String sessionId,Long value) {
-        redisTemplate.opsForValue().set(Constants.SESSION_KEY,sessionId);
         redisTemplate.opsForHash().put(token, Constants.SESSION_KEY, sessionId);
         redisTemplate.opsForHash().put(token, Constants.COUNTER_KEY, value);
         redisTemplate.expire(token, 15, TimeUnit.MINUTES);
@@ -56,12 +55,12 @@ public class RedisService {
      * @param token
      */
     public void incrementCounter(String token) {
-        Integer count = (Integer) redisTemplate.opsForHash().get(token, Constants.COUNTER_KEY);
+        Long count = (Long) redisTemplate.opsForHash().get(token, Constants.COUNTER_KEY);
         redisTemplate.opsForHash().put(token, Constants.COUNTER_KEY, ++count);
     }
 
-    public Integer getCounter(String token) {
-        return (Integer) redisTemplate.opsForHash().get(token, Constants.COUNTER_KEY);
+    public Long getCounter(String token) {
+        return (Long) redisTemplate.opsForHash().get(token, Constants.COUNTER_KEY);
     }
 
     public String getSessionId(String token) {
@@ -127,28 +126,23 @@ public class RedisService {
         redisTemplate.opsForHash().delete(key,Constants.STATUS_KEY);
     }
 
+    /**
+     * 创建分布式锁对象
+     * @param redisTemplate redis操作对象
+     * @param lockKey 分布式锁键key
+     * @param lockValue 分布式锁的值，共享资源
+     * @return
+     */
     public RedisDistributedLock getLock(RedisTemplate<String, Object> redisTemplate,String lockKey, String lockValue) {
         return new RedisDistributedLock(redisTemplate, lockKey, lockValue);
     }
 
-
-
-//    public <T> T callWithLock(Long userId,Callable<T> callable) throws Exception{
-//        //自定义lock key
-//        String lockKey = "user"+userId;
-//        //将UUID当做value，确保唯一性
-//        String lockReference = UUID.randomUUID().toString();
-//        RedisDistributedLock lock = getLock(redisTemplate, lockKey, lockReference);
-//        try {
-//            if (!lock.lockWithRetry(DEFAULT_LOCK_REGISTRY_NUMBERS,DEFAULT_LOCK_REGISTRY_TIME)) {
-//                throw new Exception("lock加锁失败");
-//            }
-//            return callable.call();
-//        } finally {
-//            lock.unlockWithRetry(DEFAULT_LOCK_REGISTRY_NUMBERS,DEFAULT_LOCK_REGISTRY_TIME);
-//        }
-//    }
-
+    /**
+     * 分布式锁，进行处理的方法
+     * @param lockKey 锁的键key
+     * @param callable 要执行的任务
+     * @param <T>
+     */
     @SneakyThrows
     public <T> void callWithLock(T lockKey,Callable callable) {
         //自定义lock key

@@ -9,6 +9,7 @@ import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.lang.reflect.Method;
+import java.net.http.HttpRequest;
 import java.util.Set;
 
 @Component
@@ -49,21 +51,17 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        //支持多种获取的方式
-        String token = request.getParameter("token");
-        if(token==null){
-            String authorizationHeader = request.getHeader("Authorization");
-            token = authorizationHeader.replace("Bearer ", "");
-        }
+        //获取token
+        String token = getParam(request,"token",BusinessMsgEnum.TOKEN_MISSING);
 
-        //token本身
+        //检查token本身是否合法
         HttpSession session = request.getSession();
         checkToken(token,session);
 
         //序列计数
-        Integer counter =  Integer.parseInt(request.getParameter("counter"));
+        Long counter =  Long.parseLong(getParam2(request,"counter",BusinessMsgEnum.COUNTER_MISSING));
         //测试用值
-        //Integer counter =2;
+//        Long counter =2L;
         checkCounter(counter,token);
 
         //权限
@@ -71,6 +69,45 @@ public class LoginInterceptor implements HandlerInterceptor {
         Set<String> urlSet= (Set<String>)session.getAttribute("permissions");
         checkUrl(urlSet,requestURI);
         return true;
+    }
+
+    /**
+     * 从请求中获取参数
+     * @param request 请求对象
+     * @param key 参数对应的键
+     * @return 获取的参数
+     */
+    @SneakyThrows
+    private String getParam(HttpServletRequest request,String key,BusinessMsgEnum businessMsgEnum){
+        String token;
+        if((token=request.getParameter(key))==null){
+            if((token = request.getHeader(key))==null){
+                try {
+                    String authorizationHeader = request.getHeader("Authorization");
+                    token = authorizationHeader.replace("Bearer ", "");
+                } catch (Exception e) {
+                    throw new BusinessErrorException(businessMsgEnum);
+                }
+            }
+        }
+        return token;
+    }
+
+    /**
+     * 从请求中获取参数,无认证头格式
+     * @param request 请求对象
+     * @param key 参数对应的键
+     * @return 获取的参数
+     */
+    @SneakyThrows
+    private String getParam2(HttpServletRequest request,String key,BusinessMsgEnum businessMsgEnum){
+        String token;
+        if((token=request.getParameter(key))==null){
+            if((token = request.getHeader(key))==null){
+                    throw new BusinessErrorException(businessMsgEnum);
+            }
+        }
+        return token;
     }
 
     /**
@@ -101,10 +138,10 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         //验证token是否合法
         JwtUtil.checkSign(token);
-        String sessionId = redisService.getSessionId(token);
-        if(!sessionId.equals(session.getId())){
-            throw new BusinessErrorException(BusinessMsgEnum.TOKEN_STOLEN);
-        }
+//        String sessionId = redisService.getSessionId(token);
+//        if(!sessionId.equals(session.getId())){
+//            throw new BusinessErrorException(BusinessMsgEnum.TOKEN_STOLEN);
+//        }
 
     }
 
@@ -113,17 +150,18 @@ public class LoginInterceptor implements HandlerInterceptor {
      * @param counter 请求提供的计数器的值
      * @param token 用户验证令牌
      */
-    private void checkCounter(Integer counter,String token){
+    private void checkCounter(Long counter,String token){
         //序列计数器是否还缓存在redis里
-        Integer count = redisService.getCounter(token);
+        Long count = redisService.getCounter(token);
         if(count==null){
             throw new BusinessErrorException(BusinessMsgEnum.TOKEN_HAS_EXPIRED);
         }
         //序列计数器是否符和预期
-        if(counter!=count){
+        if(!count.equals(counter)){
             throw new BusinessErrorException(BusinessMsgEnum.TOKEN_SAME_COUNTER);
         }
         //原子增加下一次期待的计数器的值
+
         redisService.incrementCounter(token);
     }
 
