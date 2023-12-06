@@ -1,8 +1,10 @@
 package com.example.news_control.controller;
 
+import com.example.commons.annotation.UnInterception;
 import com.example.commons.config.JsonResult;
 import com.example.news_control.entity.News;
 import com.example.news_control.service.NewsService;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +15,7 @@ import java.sql.Date;
 @RestController
 @RequestMapping("/new")
 public class NewsController {
-    @Autowired
+    @Resource
     NewsService newsService;
     @RequestMapping("/hello")
     public String sayHello(){
@@ -21,6 +23,7 @@ public class NewsController {
     }
 
     @PostMapping("/getNewsDetail")
+    @UnInterception
     public JsonResult getNewsDetail(int new_id){
         News news = newsService.getNewsDetail(new_id);
         if (news == null){

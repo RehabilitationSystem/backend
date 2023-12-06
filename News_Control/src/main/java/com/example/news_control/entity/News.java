@@ -47,19 +47,19 @@ public class News {
         this.create_time = create_time;
     }
 
-    public int getPublish_id() {
+    public Long getPublish_id() {
         return publish_id;
     }
 
-    public void setPublish_id(int publish_id) {
+    public void setPublish_id(Long publish_id) {
         this.publish_id = publish_id;
     }
 
-    public int getEditor_id() {
+    public Long getEditor_id() {
         return editor_id;
     }
 
-    public void setEditor_id(int editor_id) {
+    public void setEditor_id(Long editor_id) {
         this.editor_id = editor_id;
     }
 
@@ -67,7 +67,7 @@ public class News {
     private String title;
     private String content;
     private Date create_time;
-    private int publish_id;
-    private int editor_id;
+    private Long publish_id;
+    private Long editor_id;
 
 }
