@@ -1,7 +1,7 @@
 <configuration>
   <property name="LOG_PATTERN" value="%date{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
 <!--  不同电脑的存储日志文件路径需要进行修改-->
-  <property name="FILE_PATH" value="C:/Users/folkman/logs/newsystem01/demo.%d{yyyy-MM-dd}.%i.log" />
+  <property name="FILE_PATH" value="${FILE_PATH}/logs/newsystem01/demo.%d{yyyy-MM-dd}.%i.log" />
   <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <!-- 按照上面配置的LOG_PATTERN来打印日志 -->

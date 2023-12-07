@@ -6,16 +6,12 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.redis.connection.RedisStringCommands;
-import org.springframework.data.redis.connection.ReturnType;
-import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
-
-import org.springframework.data.redis.core.types.Expiration;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
+import java.lang.reflect.Field;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
@@ -159,5 +155,17 @@ public class RedisService {
             lock.unlockWithRetry(DEFAULT_LOCK_REGISTRY_NUMBERS,DEFAULT_LOCK_REGISTRY_TIME);
         }
     }
-
+    public <T> void saveSingleNews(int key,T value) throws NoSuchFieldException {
+        /**
+        * @Author: Liu
+        * @Description: 保存新闻列表，存入redis缓存
+        * @Params: [news]
+        * @Return: void
+        **/
+        redisTemplate.opsForValue().set(String.valueOf(key),value);
+        redisTemplate.opsForValue().set(String.valueOf(key),value);
+    }
+    public <T> T getAllNews(int key){
+        return (T) redisTemplate.opsForValue().get(key);
+    }
 }
