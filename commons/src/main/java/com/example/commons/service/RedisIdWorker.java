@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * 工具类
+ */
 @Component
 public class RedisIdWorker {
     /**

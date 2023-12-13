@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URI;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -53,15 +55,15 @@ public class UserServiceImpl implements UserService{
         Long userId = user.getUserId();
 //        用户是否已经登录
 
-        redisService.callWithLock(userId+Constants.PREFIX_USER, new Callable() {
-            @Override
-            public Object call(){
-                if(redisService.getStatus(userId)){
-                    throw new BusinessErrorException(BusinessMsgEnum.USER_HAS_LOGIN);
-                }
-                return null;
-            }
-        });
+//        redisService.callWithLock(userId+Constants.PREFIX_USER, new Callable() {
+//            @Override
+//            public Object call(){
+//                if(redisService.getStatus(userId)){
+//                    throw new BusinessErrorException(BusinessMsgEnum.USER_HAS_LOGIN);
+//                }
+//                return null;
+//            }
+//        });
 
         //初始化密码尝试次数
         checkTryNumbers(userId);
@@ -94,6 +96,10 @@ public class UserServiceImpl implements UserService{
         redisService.storeStatus(userId);
     }
 
+    @Override
+    public List<User> getAllUsers() {
+        return userMapper.getUserList();
+    }
 
 
     /**
@@ -108,6 +114,7 @@ public class UserServiceImpl implements UserService{
             public Object call(){
                 //        用户初始化个人信息
                 input.setUserId(redisIdWorker.nextId(Constants.PREFIX_USER));
+                input.setAvatar("ac69552c-c50d-47ea-ad3e-c1e920ad4867.png");
                 if(userMapper.getUserByPhone(input.getPhone())!=null){
                     throw new BusinessErrorException(BusinessMsgEnum.USER_IS_EXISTED);
                 }
@@ -190,6 +197,8 @@ public class UserServiceImpl implements UserService{
             throw new BusinessErrorException(BusinessMsgEnum.DATA_INSERT_EXCEPTION);
         }
     }
+
+
 
     /**
      * 释放redis有关登录的数据，实现退出登录.

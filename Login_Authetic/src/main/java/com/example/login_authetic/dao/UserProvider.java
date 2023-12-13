@@ -24,6 +24,9 @@ public class UserProvider {
             if (user.getIntroduce()!=null) {
                 SET(String.join(".", tableName, "introduce = #{introduce}"));
             }
+            if (user.getAvatar()!=null) {
+                SET(String.join(".", tableName, "avatar = #{avatar}"));
+            }
             WHERE("userId=#{userId}");
         }}.toString();
     }

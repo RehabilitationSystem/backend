@@ -1,5 +1,7 @@
 package com.example.commons.config;
 
+import org.springframework.beans.factory.annotation.Value;
+
 public final class Constants {
 
     // redis存储的次键名称
@@ -21,18 +23,6 @@ public final class Constants {
     public static final String AGE="age";
 
     public static final String GENDER = "gender";
-
-    public static final String NEWS_ID = "new_id"; //新闻ID
-
-    public static final String TITLE = "title"; //新闻标题
-
-    public static final String CONTENT = "content"; // 新闻内容
-
-    public static final String CREATE_TIME = "create_time"; // 创建时间
-
-    public static final String PUBLISH_ID = "publish_id"; // 发布者ID
-
-    public static final String EDITOR_ID = "editor_id"; // 编辑者ID
 //    登录相关的常量
     public static final String PREFIX_USER="user";
 
@@ -51,6 +41,10 @@ public final class Constants {
 
 //    密码正则的策略(可以进行密码策略的改进)
     public static final String PASSWORD_REGEXP = "";
+
+    public static String FILE_UPLOAD_DIR="C:/Users/folkman/Desktop/images/";
+
+
 
     // 构造方法私有化，确保类不会被实例化
     private Constants() {

@@ -1,7 +1,11 @@
 package com.example.news_control.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
 import java.sql.Date;
 
+@Entity
 public class News {
     @Override
     public String toString() {
@@ -62,7 +66,7 @@ public class News {
     public void setEditor_id(Long editor_id) {
         this.editor_id = editor_id;
     }
-
+    @Id
     private int new_id;
     private String title;
     private String content;

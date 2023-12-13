@@ -5,7 +5,6 @@ import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
-@Mapper
 public interface NewsMapper {
     @Select("SELECT * FROM news WHERE new_id = #{new_id}")
     @Results({

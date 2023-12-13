@@ -12,6 +12,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.net.URI;
+
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
@@ -37,6 +39,9 @@ public class User {
     @Null(groups = InfoGroup.class)
     private String password;
 
+    private String avatar;
+
+
     private Long userId;
 
     private Integer roleId = Constants.INITIAL_ROLE;
@@ -61,6 +66,14 @@ public class User {
 //        this.gender = gender;
 //    }
 
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public Integer getGender() {
         return gender;

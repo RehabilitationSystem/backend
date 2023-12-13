@@ -6,7 +6,12 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.connection.RedisStringCommands;
+import org.springframework.data.redis.connection.ReturnType;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+
+import org.springframework.data.redis.core.types.Expiration;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +40,9 @@ public class RedisService {
     //自定义lock key前缀
     private final static String LOCK_PREFIX = "LOCK:CUSTOMER_BALANCE";
 
+
+
+
     /**
      * 保存会话id，并初始化序列计数器
      * @param token
@@ -57,10 +65,6 @@ public class RedisService {
 
     public Long getCounter(String token) {
         return (Long) redisTemplate.opsForHash().get(token, Constants.COUNTER_KEY);
-    }
-
-    public String getSessionId(String token) {
-        return (String) redisTemplate.opsForHash().get(token, Constants.SESSION_KEY);
     }
 
     /**
@@ -121,6 +125,7 @@ public class RedisService {
         redisTemplate.opsForHash().delete(key,Constants.NUMBER_KEY);
         redisTemplate.opsForHash().delete(key,Constants.STATUS_KEY);
     }
+
 
     /**
      * 创建分布式锁对象

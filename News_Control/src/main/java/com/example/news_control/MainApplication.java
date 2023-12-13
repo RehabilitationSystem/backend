@@ -8,13 +8,14 @@ import org.springframework.jms.annotation.EnableJms;
 
 
 @PropertySource("classpath:/application.properties")
-@MapperScan({"com.example.login_authetic.dao","com.example.news_control.dao"})
+@MapperScan({"com.example.login_authetic.dao","com.example.news_control.dao","com.example.logger_security.dao"})
 @SpringBootApplication(scanBasePackages = {"com.example.news_control","com.example.login_authetic","com.example.comment_control","com.example.logger_security","com.example.commons"})
 public class MainApplication {
     public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);
     }
 }
+
 
 
 

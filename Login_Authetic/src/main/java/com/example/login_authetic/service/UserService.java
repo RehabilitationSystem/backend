@@ -7,6 +7,7 @@ import com.example.login_authetic.entity.UserInfo;
 import com.example.login_authetic.entity.UserRole;
 import jakarta.servlet.http.HttpSession;
 
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Future;
 
@@ -34,4 +35,6 @@ public interface UserService {
     void releaseRedis(String token,Long userId);
 
     void loginDataRedis(String sign,HttpSession httpSession, Long userId,Long counter);
+
+    List<User> getAllUsers();
 }

@@ -5,6 +5,7 @@ import com.example.login_authetic.entity.UserGender;
 import com.example.login_authetic.entity.UserInfo;
 import org.apache.ibatis.annotations.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Mapper
@@ -18,6 +19,15 @@ public interface UserMapper {
     })
     User getUserByPhone(String phone);
 
+    @Select("select username,phone,userId,roleId from user")
+    @Results({
+            @Result(property = "username", column = "username"),
+            @Result(property = "phone", column = "phone"),
+            @Result(property = "userId", column = "userId"),
+            @Result(property = "roleId",column = "roleId")
+    })
+    List<User> getUserList();
+
     @Select("select * from user where  userId = #{userId}")
     @Results({
             @Result(property = "username", column = "username"),
@@ -27,7 +37,7 @@ public interface UserMapper {
     })
     User getUserByUseId(Long useId);
 
-    @Insert("insert into user(userId,phone,username,password,roleId,age,introduce,gender) value(#{userId},#{phone},#{username},#{password},#{roleId},#{age},#{introduce},#{gender})")
+    @Insert("insert into user(userId,phone,username,password,roleId,age,introduce,gender,avatar) value(#{userId},#{phone},#{username},#{password},#{roleId},#{age},#{introduce},#{gender},#{avatar})")
     Integer insertUser(User user);
 
     @Insert("insert into url(url,roleId) value(#{url},#{roleId})")

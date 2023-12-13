@@ -63,7 +63,7 @@ public class GlobalExceptionHandler {
     public JsonResult handleBusinessError(BusinessErrorException ex) {
         String code = ex.getCode();
         String message = ex.getMessage();
-        logger.error("业务异常：", ex);
+        logger.error("业务异常："+ message);
         return new JsonResult(code, message);
     }
 
