@@ -23,16 +23,10 @@ public class NewsUpdateTask {
     NewsService newsService;
     @Resource
     ApplicationContext applicationContext;
-    @Scheduled(cron = "0/30 * * * * ? ")
+    @Scheduled(cron = "* 0/30 * * * ? ")
     private void updateNews() throws NoSuchFieldException {
         System.out.println("测试："+ LocalDateTime.now());
         List<Integer> newsIdList = newsService.getNewsId();
-//        // 获取上下文对象
-//        ServletContext application = applicationContext.getBean(ServletContext.class);
-//        application.setAttribute("newsList", newsIdList);
-//        System.out.println(newsIdList);
-//
-//        // 获取新闻列表
             List<News> news = newsService.getRecentNews();
         for (News n:news
              ) {

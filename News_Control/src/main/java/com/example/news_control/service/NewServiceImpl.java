@@ -3,6 +3,8 @@ package com.example.news_control.service;
 import com.example.commons.service.RedisService;
 import com.example.news_control.dao.NewsMapper;
 import com.example.news_control.entity.News;
+import com.example.news_control.entity.NewsStatus;
+import com.example.news_control.entity.NewsType;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -76,5 +78,15 @@ public class NewServiceImpl implements NewsService{
 
         redisTemplate.delete("news:" + newsId);
 
+    }
+
+    @Override
+    public List<NewsStatus> getNewsStatus() {
+        return newMapper.getNewsStatus();
+    }
+
+    @Override
+    public List<NewsType> getNewsType() {
+        return newMapper.getNewsType();
     }
 }

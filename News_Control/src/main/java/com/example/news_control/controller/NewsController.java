@@ -4,6 +4,7 @@ import com.example.commons.annotation.UnInterception;
 import com.example.commons.config.Constants;
 import com.example.commons.config.JsonResult;
 import com.example.news_control.entity.News;
+import com.example.news_control.entity.NewsStatus;
 import com.example.news_control.service.NewsService;
 import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,8 +27,8 @@ public class NewsController {
 
     @PostMapping("/getNewsDetail")
     @UnInterception
-    public JsonResult getNewsDetail(int new_id){
-        News news = newsService.getNewsDetail(new_id);
+    public JsonResult getNewsDetail(@RequestBody News rec_news){
+        News news = newsService.getNewsDetail(rec_news.getNew_id());
         if (news == null){
             return new JsonResult("400","请求失败");
         }else {
@@ -62,5 +63,17 @@ public class NewsController {
         List<News> newsList = newsService.getRecentNews();
         newsService.putRedis(newsList);
         return new JsonResult(Constants.SUCCESS_CODE,"添加新闻成功！");
+    }
+
+    @UnInterception
+    @PostMapping("/status")
+    public JsonResult getStatus(){
+
+        return new JsonResult<>(newsService.getNewsStatus());
+    }
+    @UnInterception
+    @PostMapping("/type")
+    public JsonResult getType(){
+        return new JsonResult<>(newsService.getNewsType());
     }
 }

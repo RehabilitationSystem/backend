@@ -1,6 +1,8 @@
 package com.example.news_control.dao;
 
 import com.example.news_control.entity.News;
+import com.example.news_control.entity.NewsStatus;
+import com.example.news_control.entity.NewsType;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -38,4 +40,18 @@ public interface NewsMapper {
             @Result(property = "new_id", column = "new_id")
     })
     List<Integer> getNewsId();
+
+    @Select("SELECT * FROM news_status")
+    @Results({
+            @Result(property = "new_id", column = "new_id"),
+            @Result(property = "status", column = "status"),
+    })
+    List<NewsStatus> getNewsStatus();
+
+    @Select("SELECT * FROM news_type")
+    @Results({
+            @Result(property = "new_id", column = "new_id"),
+            @Result(property = "type", column = "type"),
+    })
+    List<NewsType> getNewsType();
 }
