@@ -58,8 +58,10 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         //图片的资源映射
-        registry.addResourceHandler("/images/**").addResourceLocations(
-                "file:"+Constants.FILE_UPLOAD_DIR);
+        registry.addResourceHandler("/images/avatar/**").addResourceLocations(
+                "file:"+Constants.AVATAR_UPLOAD_DIR);
+        registry.addResourceHandler("/images/news/**").addResourceLocations(
+                "file:"+Constants.NEWS_UPLOAD_DIR);
         registry.addResourceHandler("swagger-ui.html").addResourceLocations(
                 "classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations(

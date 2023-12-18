@@ -29,29 +29,6 @@ public class ActiveMQConfig{
     @Value("${spring.activemq.broker-url}")
     private String brokerUrl;
 
- 
-    @Value("${spring.activemq.queue-name}")
-    private String queueName;
-
-    @Value("${spring.activemq.topic-name}")
-    private String topicName;
-
-
-    @Bean
-    public Queue queue() {
-        System.out.println("注入队列实例：" + queueName);
-        return new ActiveMQQueue(queueName);
-    }
-
-    @Bean
-    public Topic topic() {
-        System.out.println("注入广播实例：" + topicName);
-        return new ActiveMQTopic(topicName);
-    }
-
-
-
-
 
     @Bean
     public ActiveMQConnectionFactory connectionFactory() {

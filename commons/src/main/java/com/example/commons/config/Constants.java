@@ -42,9 +42,14 @@ public final class Constants {
 //    密码正则的策略(可以进行密码策略的改进)
     public static final String PASSWORD_REGEXP = "";
 
-    public static String FILE_UPLOAD_DIR="C:/Users/folkman/Desktop/images/";
+    //存储头像的地址
+    public static String AVATAR_UPLOAD_DIR="C:/Users/folkman/Desktop/images/avatar";
+    //存储新闻头像
+    public static String NEWS_UPLOAD_DIR="C:/Users/folkman/Desktop/images/news";
 
+    public final static String QUEUE_NAME="user";
 
+    public final static String TOPIC_NAME="user";
 
     // 构造方法私有化，确保类不会被实例化
     private Constants() {

@@ -27,6 +27,7 @@ public enum BusinessMsgEnum {
     URI_SET_NULL("400","获取访问权限失败！"),
     TOKEN_MISSING("400","TOKEN令牌没有被携带！"),
     COUNTER_MISSING("400","序列号计数器counter没有被携带！"),
+    FILE_CREATE_FAIL("500","文件夹创建失败！"),
     TOKEN_NOT_USED("401","token令牌未被携带！");
     /**
      * 消息码

@@ -1,15 +1,11 @@
 package com.example.login_authetic.controller;
 
-import com.example.commons.annotation.MainTransaction;
 import com.example.commons.annotation.WebLog;
 import com.example.commons.config.Constants;
-import com.example.commons.service.JwtUtil;
+import com.example.commons.service.*;
 import com.example.commons.config.JsonResult;
-import com.example.commons.service.MessageServiceImpl;
-import com.example.commons.service.RedisIdWorker;
 import com.example.login_authetic.entity.*;
 import com.example.commons.annotation.UnInterception;
-import com.example.commons.service.RedisService;
 import com.example.login_authetic.entity.groupRule.InfoGroup;
 import com.example.login_authetic.entity.groupRule.LoginGroup;
 import com.example.login_authetic.entity.groupRule.RegisterGroup;
@@ -26,13 +22,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.*;
-import java.util.concurrent.Future;
 
 @RestController
 @RequestMapping("/user")
@@ -48,17 +38,19 @@ class UserController {
     @Resource
     private MessageServiceImpl messageService;
 
+    @Resource
+    private ImageUtil imageUtil;
+
     @GetMapping("/1.0/test/send")
     @UnInterception
     public void test(){
-        messageService.sendMessage("Nihao");
+        messageService.sendMessage("asdasdadad");
     }
 
     @GetMapping("/1.0/test/receive")
     @UnInterception
     public void test1(){
-        String s = messageService.doMessage();
-        logger.error(s);
+        Object s = messageService.doMessage(String.class);
     }
 
 
@@ -81,8 +73,8 @@ class UserController {
         //数据存到会话里
         Set<String> permissions = userService.getPermissions(userId);
         httpSession.setAttribute("permissions",permissions);
-        String host = getHost((new URI(httpServletRequest.getRequestURL() + ""))) + "/images/" + login.getAvatar();
-        login.setAvatar(host);
+        String imageIp = imageUtil.getImageIp(httpServletRequest, login.getAvatar(), Constants.AVATAR_UPLOAD_DIR);
+        login.setAvatar(imageIp);
         return new JsonResult(new ArrayList<>(Arrays.asList(sign,counter,login)),Constants.SUCCESS_CODE,"登录成功！");
     }
 
@@ -150,56 +142,20 @@ class UserController {
     }
 
 
+    /**
+     * 上传文件
+     * @param httpServletRequest
+     * @param file
+     * @param session
+     * @return
+     */
     @SneakyThrows
     @UnInterception
     @PostMapping("/1.0/upload")
     public JsonResult upload(HttpServletRequest httpServletRequest,
                                   @RequestParam("file") MultipartFile file,HttpSession session) {
-        String fileName = file.getOriginalFilename();
-        //获取文件后缀
-        String suffixName = fileName.substring(fileName.lastIndexOf("."));
-        //生成文件名称UUID
-        UUID uuid = UUID.randomUUID();
-        //得到文件全名字
-        String newFileName = uuid.toString() + suffixName;
-        //创建文件
-        //获取文件夹地址
-        File fileDirectory = new File(Constants.FILE_UPLOAD_DIR);
-        //文件地址
-        File destFile = new File(Constants.FILE_UPLOAD_DIR +  newFileName);
-        //文件夹不存在，就先创建文件夹
-        if (!fileDirectory.exists()) {
-            //如果文件夹创建失败就抛异常（fileDirectory.mkdir()）
-            if (!fileDirectory.mkdir()) {
-                //业务异常
-            }
-        }
-        //到这，文件夹就肯定存在了。。
-        try {
-            //文件写入  file-->destFile
-            //这样就把http传入的文件file写入指定的路径下的destFile文件中，完成了文件上传
-            file.transferTo(destFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-//        User user = new User();
-//        user.setAvatar(newFileName);
-//        userService.changeInfo(user);
-        //完成文件上传后，还需要指定http资源映射
-        return new JsonResult(getHost(new URI(httpServletRequest.getRequestURL() + "")) + "/images/"
-                + newFileName, Constants.SUCCESS_CODE,"上传成功");
-    }
-
-    //获取当前的ip和端口号
-    private URI getHost(URI uri) {
-        URI effectiveURI;
-        try {
-            effectiveURI = new URI(uri.getScheme(), uri.getUserInfo(), uri.getHost(), uri.getPort(),
-                    null, null, null);
-        } catch (URISyntaxException e) {
-            effectiveURI = null;
-        }
-        return effectiveURI;
+        String newFileName = imageUtil.upload(file,Constants.AVATAR_UPLOAD_DIR);
+        return new JsonResult(imageUtil.getImageIp(httpServletRequest,newFileName,Constants.AVATAR_UPLOAD_DIR), Constants.SUCCESS_CODE,"上传成功");
     }
 
 

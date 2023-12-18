@@ -1,7 +1,7 @@
 package com.example.commons.service;
 
+import com.example.commons.config.Constants;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +11,13 @@ public class MessageServiceImpl{
     @Resource
     private JmsMessagingTemplate jmsMessagingTemplate;
 
-    public void sendMessage(String message) {
+    public <T> void sendMessage(T message) {
         System.out.println("等待发送的信息为：" + message);
-        jmsMessagingTemplate.convertAndSend("order.queue.message",message);
+        jmsMessagingTemplate.convertAndSend(Constants.TOPIC_NAME, message);
     }
 
-    public String doMessage() {
-        String message = jmsMessagingTemplate.receiveAndConvert("order.queue.message",String.class);
+    public <T> T doMessage(Class<T> destClass) {
+        T message = jmsMessagingTemplate.receiveAndConvert(Constants.TOPIC_NAME, destClass);
         System.out.println("已经接收到信息：" + message);
         return message;
     }
