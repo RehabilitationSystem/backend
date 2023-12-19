@@ -75,6 +75,7 @@ class UserController {
         httpSession.setAttribute("permissions",permissions);
         String imageIp = imageUtil.getImageIp(httpServletRequest, login.getAvatar(), Constants.AVATAR_UPLOAD_DIR);
         login.setAvatar(imageIp);
+        logger.info("计数器的值"+counter);
         return new JsonResult(new ArrayList<>(Arrays.asList(sign,counter,login)),Constants.SUCCESS_CODE,"登录成功！");
     }
 
@@ -138,7 +139,7 @@ class UserController {
     @GetMapping("/1.0/all")
     public JsonResult<String> getUserList(){
         List<User> allUsers = userService.getAllUsers();
-        return new JsonResult(allUsers,Constants.SUCCESS_CODE,"注销用户成功！");
+        return new JsonResult(allUsers,Constants.SUCCESS_CODE,"获取所有用户信息成功！");
     }
 
 

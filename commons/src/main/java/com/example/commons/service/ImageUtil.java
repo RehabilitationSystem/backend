@@ -36,7 +36,7 @@ public class ImageUtil {
             }
         }
         //创建目标文件
-        File destFile = new File(storeIP +  newFileName);
+        File destFile = new File(storeIP + "/" +newFileName);
         try {
             //传入文件写入
             file.transferTo(destFile);
