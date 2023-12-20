@@ -32,6 +32,7 @@ public class CommentController {
 
     public List<Comment> listParentComments() {
         List<Comment> comments = commentService.listParentComment();
+        System.out.println(comments.get(0));
         return comments;
     }
     @GetMapping("/child")
@@ -39,10 +40,10 @@ public class CommentController {
         List<Comment> comments = commentService.listChildComment(parentId);
         return comments;
     }
-    @CrossOrigin(origins = "*")
-    @RequestMapping("/test")
-    public Comment test(@RequestParam Comment comment){
-        return comment;
-    }
+//    @CrossOrigin(origins = "*")
+//    @RequestMapping("/test")
+//    public Comment test(@RequestParam Comment comment){
+//        return comment;
+//    }
 
 }

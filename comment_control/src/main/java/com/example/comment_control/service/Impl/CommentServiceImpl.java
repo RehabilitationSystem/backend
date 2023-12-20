@@ -19,7 +19,12 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> listParentComment() {
-        return commentMapper.listParentComment();
+        List<Comment> comments=commentMapper.listParentComment();
+        for(int i=0;i<comments.size();i++){
+                Long ID = comments.get(0).getCommentId();
+                comments.get(0).setReplyComment(commentMapper.listChildComments(ID));
+        }
+        return comments;
     }
 
     @Override

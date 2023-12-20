@@ -15,6 +15,6 @@ public interface CommentMapper {
     public Comment findById(String id);
     @Select("select * from comment where is_Parent= 1")
     public List<Comment> listParentComment();
-    @Select("select * from comment where parentId = ${parentId}")
+    @Select("select * from comment where parent_id = ${parentId}")
     public List<Comment> listChildComments(Long parentId);
 }
