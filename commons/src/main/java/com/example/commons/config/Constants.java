@@ -51,7 +51,14 @@ public final class Constants {
 
     public final static String TOPIC_NAME="user";
 
+    //默认头像文件名
+    public final static String DEFAULT_AVATAR="1b35e476-d9fc-4976-b5d7-13860f068fb4.png";
+
     // 构造方法私有化，确保类不会被实例化
+
+    //计数器同步锁的主键前缀
+    public final static String COUNTER_LOCK_KEY="session";
+
     private Constants() {
     }
 }

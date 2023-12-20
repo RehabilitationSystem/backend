@@ -26,7 +26,6 @@ public class NewsController {
     }
 
     @PostMapping("/getNewsDetail")
-    @UnInterception
     public JsonResult getNewsDetail(@RequestBody News rec_news){
         News news = newsService.getNewsDetail(rec_news.getNew_id());
         if (news == null){
@@ -50,14 +49,12 @@ public class NewsController {
         int i = newsService.updateNews(news);
         return new JsonResult<News>(news);
     }
-    @UnInterception
     @PostMapping("/recentNews")
     public JsonResult getRecentNews(){
         // 启动redis服务，存储登录数据
         return new JsonResult(newsService.getRecentNews());
     }
 
-    @UnInterception
     @GetMapping("/testRedis")
     public JsonResult testRedis() throws NoSuchFieldException {
         List<News> newsList = newsService.getRecentNews();
@@ -65,13 +62,11 @@ public class NewsController {
         return new JsonResult(Constants.SUCCESS_CODE,"添加新闻成功！");
     }
 
-    @UnInterception
     @PostMapping("/status")
     public JsonResult getStatus(){
 
         return new JsonResult<>(newsService.getNewsStatus());
     }
-    @UnInterception
     @PostMapping("/type")
     public JsonResult getType(){
         return new JsonResult<>(newsService.getNewsType());

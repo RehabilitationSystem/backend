@@ -109,12 +109,13 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void register(User input) {
+        //同步锁，针对，某个电话号同一时间只能注册一个
         redisService.callWithLock(Constants.PHONE+input.getPhone(), new Callable() {
             @Override
             public Object call(){
                 //        用户初始化个人信息
                 input.setUserId(redisIdWorker.nextId(Constants.PREFIX_USER));
-                input.setAvatar("ac69552c-c50d-47ea-ad3e-c1e920ad4867.png");
+                input.setAvatar(Constants.DEFAULT_AVATAR);
                 if(userMapper.getUserByPhone(input.getPhone())!=null){
                     throw new BusinessErrorException(BusinessMsgEnum.USER_IS_EXISTED);
                 }

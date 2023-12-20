@@ -1,6 +1,7 @@
 package com.example.commons;
 
 import com.example.commons.annotation.UnInterception;
+import com.example.commons.config.Constants;
 import com.example.commons.exceptiondeal.BusinessErrorException;
 import com.example.commons.exceptiondeal.BusinessMsgEnum;
 import com.example.commons.service.JwtUtil;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.lang.reflect.Method;
 import java.net.http.HttpRequest;
 import java.util.Set;
+import java.util.concurrent.Callable;
 
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
@@ -53,10 +55,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         checkToken(token,session);
 
         //序列计数
-//        Long counter =  Long.parseLong(getParam2(request,"counter",BusinessMsgEnum.COUNTER_MISSING));
-        //测试用值
-//        Long counter =2L;
-//        checkCounter(counter,token);
+        Long counter =  Long.parseLong(getParam2(request,"counter",BusinessMsgEnum.COUNTER_MISSING));
+        checkCounter(counter,token);
 
         //权限
         String requestURI = request.getRequestURI();
@@ -145,18 +145,25 @@ public class LoginInterceptor implements HandlerInterceptor {
      * @param token 用户验证令牌
      */
     private void checkCounter(Long counter,String token){
-        //序列计数器是否还缓存在redis里
-        Long count = redisService.getCounter(token);
-        if(count==null){
-            throw new BusinessErrorException(BusinessMsgEnum.TOKEN_HAS_EXPIRED);
-        }
-        //序列计数器是否符和预期
-        if(!count.equals(counter)){
-            throw new BusinessErrorException(BusinessMsgEnum.TOKEN_SAME_COUNTER);
-        }
-        //原子增加下一次期待的计数器的值
+        redisService.callWithLock(Constants.COUNTER_LOCK_KEY+token, new Callable() {
+            @Override
+            public Object call(){
+                //        用户初始化个人信息
+                //序列计数器是否还缓存在redis里
+                Long count = redisService.getCounter(token);
+                if(count==null){
+                    throw new BusinessErrorException(BusinessMsgEnum.TOKEN_HAS_EXPIRED);
+                }
+                //序列计数器是否符和预期
+                if(!count.equals(counter)){
+                    throw new BusinessErrorException(BusinessMsgEnum.TOKEN_SAME_COUNTER);
+                }
+                //原子增加下一次期待的计数器的值
 
-        redisService.incrementCounter(token);
+                redisService.incrementCounter(token);
+                return null;
+            }
+        });
     }
 
 
