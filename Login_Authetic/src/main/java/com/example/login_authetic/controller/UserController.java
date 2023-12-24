@@ -101,6 +101,13 @@ class UserController {
         return new JsonResult(Constants.SUCCESS_CODE,"修改密码成功！");
     }
 
+    @PostMapping("/1.0/verify")
+    public JsonResult<String> verifyPassword(HttpSession session,@RequestBody PasswordChangeRequest pcRequest){
+        User login = (User) session.getAttribute("login");
+        userService.verifyPassword(pcRequest.getOldPassword(), login.getUserId());
+        return new JsonResult(Constants.SUCCESS_CODE,"旧密码正确！");
+    }
+
     @PostMapping("/1.0/role")
     public JsonResult<String> addRole(@RequestBody @Validated UserRole userRole){
         userService.insertRole(userRole);
@@ -108,7 +115,7 @@ class UserController {
     }
 
     @PatchMapping("/1.0/")
-    public JsonResult<String> changeInfo(HttpSession session,@RequestBody @Validated({InfoGroup.class,Default.class}) User user){
+    public JsonResult<String> changeInfo(HttpSession session,@RequestBody @Validated({InfoGroup.class}) User user){
         User login = (User) session.getAttribute("login");
         user.setUserId(login.getUserId());
         userService.changeInfo(user);

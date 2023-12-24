@@ -28,6 +28,8 @@ public interface UserService {
 
      void changePassword(String newPassword,String oldPassword,Long userId);
 
+    void verifyPassword(String oldPassword, Long userId);
+
     void changeInfo(User user);
 
     void changePermission(Long userId,Integer roleId);

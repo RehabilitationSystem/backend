@@ -30,7 +30,7 @@ public class User {
     @NotNull(message = "用户名不能为null",groups = RegisterGroup.class)
     @Size(min = 1,message = "用户名不能为空",groups = RegisterGroup.class)
     @Null(message = "登录时，用户名必须为空",groups = LoginGroup.class)
-    @Null(groups = InfoGroup.class)
+//    @Null(groups = InfoGroup.class)
     private String username;
 
     @NotNull
@@ -48,7 +48,7 @@ public class User {
 
 //    @Convert(converter = UserGender.Convert.class)
 //    private UserGender gender = UserGender.UNKNOWN;
-    private Integer gender = 3;
+    private Integer gender;
 
 
     private Byte age = Constants.INITIAL_AGE;

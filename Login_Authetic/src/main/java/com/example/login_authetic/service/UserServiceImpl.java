@@ -1,8 +1,6 @@
 package com.example.login_authetic.service;
 
-import com.example.commons.annotation.SonTransaction;
 import com.example.commons.config.Constants;
-import com.example.commons.service.JwtUtil;
 import com.example.commons.service.RedisIdWorker;
 import com.example.commons.service.RedisService;
 import com.example.commons.exceptiondeal.BusinessErrorException;
@@ -18,12 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.net.URI;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -115,6 +110,7 @@ public class UserServiceImpl implements UserService{
             public Object call(){
                 //        用户初始化个人信息
                 input.setUserId(redisIdWorker.nextId(Constants.PREFIX_USER));
+                input.setGender(3);
                 input.setAvatar(Constants.DEFAULT_AVATAR);
                 if(userMapper.getUserByPhone(input.getPhone())!=null){
                     throw new BusinessErrorException(BusinessMsgEnum.USER_IS_EXISTED);
@@ -184,6 +180,19 @@ public class UserServiceImpl implements UserService{
             throw new BusinessErrorException(BusinessMsgEnum.UNEXPECTED_EXCEPTION);
         }
     }
+
+    @Override
+    public void verifyPassword(String oldPassword, Long userId) {
+        User user;
+        if((user=userMapper.getUserByUseId(userId))==null){
+            throw new BusinessErrorException(BusinessMsgEnum.USER_NOT_EXISTED);
+        }
+        if(!passwordEncoder.matches(oldPassword,user.getPassword())){
+            throw new BusinessErrorException(BusinessMsgEnum.PASSWORD_WRONG_EXISTED);
+        }
+        user.setPassword(null);
+    }
+
 
     @Override
     public void changeInfo(User user) {
