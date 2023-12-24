@@ -2,18 +2,15 @@ package com.example.news_control.service;
 
 import com.example.commons.service.RedisService;
 import com.example.news_control.dao.NewsMapper;
+import com.example.news_control.entity.IndexNews;
 import com.example.news_control.entity.News;
-import com.example.news_control.entity.NewsStatus;
-import com.example.news_control.entity.NewsType;
 import jakarta.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Timer;
 
 @Service
 public class NewServiceImpl implements NewsService{
@@ -81,12 +78,27 @@ public class NewServiceImpl implements NewsService{
     }
 
     @Override
-    public List<NewsStatus> getNewsStatus() {
-        return newMapper.getNewsStatus();
+    public void upload(int new_id, String picUrl) {
+        newMapper.uploadImage(new_id,picUrl);
     }
 
     @Override
-    public List<NewsType> getNewsType() {
-        return newMapper.getNewsType();
+    public List<String> getNewsPic(int new_id) {
+        return newMapper.getNewsImages(new_id);
+    }
+
+    @Override
+    public List<News> ManageNewsList() {
+        return newMapper.ManageNewsList();
+    }
+
+    @Override
+    public News getRedis(String key) {
+        return redisService.getAllNews(key);
+    }
+
+    @Override
+    public List<IndexNews> getIndexNews() {
+        return newMapper.getIndexNews();
     }
 }

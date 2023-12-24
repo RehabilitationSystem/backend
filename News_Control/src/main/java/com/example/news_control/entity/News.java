@@ -7,17 +7,6 @@ import java.sql.Date;
 
 @Entity
 public class News {
-    @Override
-    public String toString() {
-        return "News{" +
-                "new_id=" + new_id +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", create_time=" + create_time +
-                ", publish_id=" + publish_id +
-                ", editor_id=" + editor_id +
-                '}';
-    }
 
     public int getNew_id() {
         return new_id;
@@ -73,5 +62,37 @@ public class News {
     private Date create_time;
     private Long publish_id;
     private Long editor_id;
+    private String status;
 
+    @Override
+    public String toString() {
+        return "News{" +
+                "new_id=" + new_id +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", create_time=" + create_time +
+                ", publish_id=" + publish_id +
+                ", editor_id=" + editor_id +
+                ", status=" + status +
+                ", type=" + type +
+                '}';
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    private String type;
 }

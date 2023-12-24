@@ -1,10 +1,7 @@
 package com.example.news_control.service;
 
-import com.example.commons.service.RedisService;
+import com.example.news_control.entity.IndexNews;
 import com.example.news_control.entity.News;
-import com.example.news_control.entity.NewsStatus;
-import com.example.news_control.entity.NewsType;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,6 +16,12 @@ public interface NewsService {
     void addNews(News news);
     News getNewsById(int newsId);
     void deleteNews(int newsId);
-    List<NewsStatus> getNewsStatus();
-    List<NewsType> getNewsType();
+
+    List<News> ManageNewsList();
+    void upload(int new_id,String picUrl);
+    List<String> getNewsPic(int new_id);
+
+    News getRedis(String key);
+    List<IndexNews> getIndexNews();
 }
+
