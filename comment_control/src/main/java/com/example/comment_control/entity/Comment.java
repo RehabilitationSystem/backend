@@ -12,8 +12,10 @@ public class Comment {
     private String content;
     private String dateTime;
     private Long commentId;
-    private int is_Parent;
+    private String isParent;
     private String target;
+    private Long newsId;
+    private Long parentId;
     private List<Comment> replyComment;
 
 }

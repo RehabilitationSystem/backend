@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +27,14 @@ public class CommentController {
     @RequestMapping("/addComment")
     public void addComment(@RequestBody Comment comment) {
 //        JSON.parseArray("[" + JSONObject.toJSONString(comment) + "]");
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        String formattedTime = currentTime.format(formatter);
+
+        System.out.println("当前具体时间：" + formattedTime);
+        comment.setDateTime(formattedTime);
         commentService.addComment(comment);
     }
     @GetMapping("/parent")
@@ -32,7 +42,7 @@ public class CommentController {
 
     public List<Comment> listParentComments() {
         List<Comment> comments = commentService.listParentComment();
-        System.out.println(comments.get(0));
+//        System.out.println(comments.get(0));
         return comments;
     }
     @GetMapping("/child")
