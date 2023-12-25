@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 @Data
 public class Comment {
-    private String authorId;
+    private Long authorId;
     private String authorName;
     private String content;
     private String dateTime;

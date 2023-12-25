@@ -35,6 +35,12 @@ public class CommentController {
 
         System.out.println("当前具体时间：" + formattedTime);
         comment.setDateTime(formattedTime);
+
+        //用登陆的用户id用户名和当前页面新闻id替换username,2101000928L和1L
+        comment.setAuthorId(2101000928L);
+        comment.setNewsId(1L);
+        comment.setAuthorName("username");
+
         commentService.addComment(comment);
     }
     @GetMapping("/parent")
