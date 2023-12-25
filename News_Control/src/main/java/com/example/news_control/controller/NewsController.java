@@ -93,7 +93,7 @@ public class NewsController {
     @UnInterception
     @PostMapping("/upload")
     public JsonResult upload(HttpServletRequest httpServletRequest,
-                             @RequestParam("file") MultipartFile file,@RequestParam("new_id") int new_id , HttpSession session) {
+                             @RequestParam("file") MultipartFile file, int new_id , HttpSession session) {
         String newFileName = imageUtil.upload(file,Constants.NEWS_UPLOAD_DIR);
         newsService.upload(new_id,newFileName);
         return new JsonResult(imageUtil.getImageIp(httpServletRequest,newFileName,Constants.NEWS_UPLOAD_DIR), Constants.SUCCESS_CODE,"上传成功");
