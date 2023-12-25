@@ -1,49 +1,30 @@
 package com.example.comment_control.controller;
 
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.example.comment_control.entity.Comment;
 import com.example.comment_control.service.CommentService;
-import com.example.commons.annotation.UnInterception;
-import jakarta.annotation.Resource;
+import com.example.comment_control.service.CommentServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/comment")
-@CrossOrigin(origins = "*")
+//@RequestMapping("/comment")
 public class CommentController {
-    @Resource
+    @Autowired
     private CommentService commentService;
     private List<Comment> comments;
-    @UnInterception
-    @RequestMapping("/addComment")
-    public void addComment(@RequestBody Comment comment) {
-//        JSON.parseArray("[" + JSONObject.toJSONString(comment) + "]");
-        commentService.addComment(comment);
+    @RequestMapping("/submitComment")
+    public void addComment(@RequestParam String authorId,@RequestParam String content,@RequestParam String dataTime){
+       Comment comment=new Comment();
+       comment.setAuthorId(authorId);
+       comment.setContent(content);
+       comment.setDataTime(dataTime);
+       commentService.addComment(comment);
     }
-    @GetMapping("/parent")
-    @UnInterception
-
-    public List<Comment> listParentComments() {
-        List<Comment> comments = commentService.listParentComment();
-        System.out.println(comments.get(0));
-        return comments;
-    }
-    @GetMapping("/child")
-    public List<Comment> listChildComments(@RequestParam Long parentId) {
-        List<Comment> comments = commentService.listChildComment(parentId);
-        return comments;
-    }
-//    @CrossOrigin(origins = "*")
-//    @RequestMapping("/test")
-//    public Comment test(@RequestParam Comment comment){
-//        return comment;
-//    }
 
 }

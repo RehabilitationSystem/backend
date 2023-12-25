@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface CommentService {
     void addComment(Comment comment);
-    List<Comment> listParentComment();
-    List<Comment> listChildComment(Long parentId);
+    List<Comment> listAll();
     Comment findById(String id);
 }
