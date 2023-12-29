@@ -24,6 +24,7 @@ public class CommentServiceImpl implements CommentService {
                 Long ID = comments.get(0).getCommentId();
                 comments.get(0).setReplyComment(commentMapper.listChildComments(ID));
         }
+//        System.out.println(comments.get(0));
         return comments;
     }
 

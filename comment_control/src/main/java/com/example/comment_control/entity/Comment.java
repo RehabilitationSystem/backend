@@ -1,37 +1,21 @@
 package com.example.comment_control.entity;
 
+import lombok.Data;
+
 import java.time.LocalDate;
-
+import java.util.Date;
+import java.util.List;
+@Data
 public class Comment {
-    private String authorId;
+    private Long authorId;
+    private String authorName;
     private String content;
-    private String dataTime;
-//    public Comment(String authorId,String content,String dataTime){
-//        this.authorId=authorId;
-//        this.dataTime=dataTime;
-//        this.content=content;
-//    }
-    public void setAuthorId(String authorId) {
-        this.authorId = authorId;
-    }
+    private String dateTime;
+    private Long commentId;
+    private String isParent;
+    private String target;
+    private Long newsId;
+    private Long parentId;
+    private List<Comment> replyComment;
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public void setDataTime(String dataTime) {
-        this.dataTime = dataTime;
-    }
-
-    public String getAuthorId() {
-        return authorId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public String getDataTime() {
-        return dataTime;
-    }
 }
