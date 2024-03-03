@@ -81,8 +81,6 @@ public class JwtUtil {
     public static boolean checkSign(String token) {
         Algorithm algorithm  = Algorithm.HMAC256(SECRET);
         JWTVerifier verifier = JWT.require(algorithm)
-//                JWT 中的 claim 必须包含一个名为 "username" 的 key，且其值必须与指定的 username 变量相等。
-                //.withClaim("username, username)
                 .build();
         verifier.verify(token);
         return true;

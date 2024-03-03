@@ -55,8 +55,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         checkToken(token,session);
 
         //序列计数
-//        Long counter =  Long.parseLong(getParam2(request,"counter",BusinessMsgEnum.COUNTER_MISSING));
-//        checkCounter(counter,token);
+        Long counter =  Long.parseLong(getParam2(request,"counter",BusinessMsgEnum.COUNTER_MISSING));
+        checkCounter(counter,token);
 
         //权限
         String requestURI = request.getRequestURI();
@@ -132,10 +132,10 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         //验证token是否合法
         JwtUtil.checkSign(token);
-//        String sessionId = redisService.getSessionId(token);
-//        if(!sessionId.equals(session.getId())){
-//            throw new BusinessErrorException(BusinessMsgEnum.TOKEN_STOLEN);
-//        }
+        String sessionId = redisService.getSessionId(token);
+        if(!sessionId.equals(session.getId())){
+            throw new BusinessErrorException(BusinessMsgEnum.TOKEN_STOLEN);
+        }
 
     }
 

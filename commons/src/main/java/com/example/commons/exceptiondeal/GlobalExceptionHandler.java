@@ -2,6 +2,7 @@ package com.example.commons.exceptiondeal;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.example.commons.config.JsonResult;
+import com.fasterxml.jackson.databind.exc.InvalidDefinitionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.RedisConnectionFailureException;
@@ -110,6 +111,8 @@ public class GlobalExceptionHandler {
     }
 
 
+
+
     /**
      * token认证失败异常处理 - JWTVerificationException
      * controller中方法上配置token校验，校验不通过会抛出JWTVerificationException
@@ -120,6 +123,18 @@ public class GlobalExceptionHandler {
         String message = ex.getMessage();
         logger.error("请求方式错误异常：", ex);
         return new JsonResult("405", message);
+    }
+
+    /**
+     * 自定义线程池使用失败 - threadPoolVerificationException
+     * controller中方法上配置token校验，校验不通过会抛出JWTVerificationException
+     */
+    @ExceptionHandler(InvalidDefinitionException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public Object initPoolViolationException(InvalidDefinitionException ex) {
+        String message = ex.getMessage();
+        logger.error("线程池初始化失败：", ex);
+        return new JsonResult("133", message);
     }
 
     /**

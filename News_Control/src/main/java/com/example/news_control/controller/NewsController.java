@@ -66,7 +66,7 @@ public class NewsController {
     @PostMapping("/updateNews")
     public JsonResult<News> updateNews(@RequestBody News news){
         int i = newsService.updateNews(news);
-        return new JsonResult<News>(news);
+           return new JsonResult<News>(news);
     }
     @UnInterception
     @PostMapping("/recentNews")

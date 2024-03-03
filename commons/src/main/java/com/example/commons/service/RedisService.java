@@ -138,6 +138,8 @@ public class RedisService {
         return new RedisDistributedLock(redisTemplate, lockKey, lockValue);
     }
 
+
+
     /**
      * 分布式锁，进行处理的方法
      * @param lockKey 锁的键key
@@ -170,7 +172,11 @@ public class RedisService {
         redisTemplate.opsForValue().set(String.valueOf(key),value);
         redisTemplate.opsForValue().set(String.valueOf(key),value);
     }
-    public <T> T getAllNews(int key){
+    public <T> T getAllNews(String key){
         return (T) redisTemplate.opsForValue().get(key);
+    }
+
+    public String getSessionId(String token) {
+        return (String) redisTemplate.opsForHash().get(token, Constants.SESSION_KEY);
     }
 }

@@ -49,16 +49,15 @@ public class UserServiceImpl implements UserService{
         }
         Long userId = user.getUserId();
 //        用户是否已经登录
-
-//        redisService.callWithLock(userId+Constants.PREFIX_USER, new Callable() {
-//            @Override
-//            public Object call(){
-//                if(redisService.getStatus(userId)){
-//                    throw new BusinessErrorException(BusinessMsgEnum.USER_HAS_LOGIN);
-//                }
-//                return null;
-//            }
-//        });
+        redisService.callWithLock(userId+Constants.PREFIX_USER, new Callable() {
+            @Override
+            public Object call(){
+                if(redisService.getStatus(userId)){
+                    throw new BusinessErrorException(BusinessMsgEnum.USER_HAS_LOGIN);
+                }
+                return null;
+            }
+        });
 
         //初始化密码尝试次数
         checkTryNumbers(userId);

@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @Author Handsome
@@ -45,6 +46,9 @@ public class IPAddressUtils {
                 ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
             }
         }
+        //处理ip欺骗
+        ipAddress.getBytes(StandardCharsets.UTF_8);
+
         return ipAddress;
     }
 }
