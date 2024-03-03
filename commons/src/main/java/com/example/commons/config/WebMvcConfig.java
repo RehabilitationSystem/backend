@@ -1,5 +1,6 @@
 package com.example.commons.config;
 
+import com.alibaba.fastjson.parser.ParserConfig;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
@@ -40,6 +41,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
                 SerializerFeature.WriteNullBooleanAsFalse,
                 // 避免循环引用
                 SerializerFeature.DisableCircularReferenceDetect);
+
 
         converter.setFastJsonConfig(config);
         converter.setDefaultCharset(Charset.forName("UTF-8"));

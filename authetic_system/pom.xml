@@ -3,25 +3,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.5</version>
-        <relativePath/> <!-- lookup parent fromc repository -->
+        <groupId>com.example</groupId>
+        <artifactId>NewSystem01</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>NewSystem01</artifactId>
+    <artifactId>authetic_system</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>NewSystem01</name>
-    <description>NewSystem01</description>
-    <packaging>pom</packaging>
-
-    <modules>
-        <module>reservation_control</module>
-        <module>authetic_system</module>
-        <module>commons</module>
-        <module>logger_monitor</module>
-        <module>treatment_system</module>
-    </modules>
+    <name>authetic_system</name>
+    <description>authetic_system</description>
 
 
     <properties>
@@ -29,12 +20,12 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
+
     <dependencies>
         <dependency>
-            <groupId>com.example</groupId>
-            <artifactId>commons</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <exclusions></exclusions>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.1.0</version>
         </dependency>
     </dependencies>
 
@@ -43,6 +34,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <image>
+                        <builder>paketobuildpacks/builder-jammy-base:latest</builder>
+                    </image>
+                </configuration>
             </plugin>
         </plugins>
     </build>
