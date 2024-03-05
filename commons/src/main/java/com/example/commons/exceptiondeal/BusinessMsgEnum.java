@@ -14,6 +14,7 @@ public enum BusinessMsgEnum {
     /** 500 : 一劳永逸的提示也可以在这定义 */
     UNEXPECTED_EXCEPTION("500", "系统发生异常，请联系管理员！"),
     DATA_INSERT_EXCEPTION("501", "数据插入错误！"),
+    DATA_UPDATE_EXCEPTION("501", "数据更改错误！"),
     // 还可以定义更多的业务异常
     USER_NOT_EXISTED("400","该用户不存在！"),
     PASSWORD_WRONG_EXISTED("400","密码错误！"),
