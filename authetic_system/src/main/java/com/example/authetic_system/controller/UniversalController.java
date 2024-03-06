@@ -9,6 +9,7 @@ import com.example.authetic_system.entity.Equipment;
 import com.example.authetic_system.entity.Patient;
 import com.example.authetic_system.service.UniversalService;
 import jakarta.annotation.Resource;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -94,6 +95,17 @@ public class UniversalController {
 
     }
 
-
+    //根据患者id获取预约的所以医生的医生信息
+    @GetMapping("/1.0/getDocsByPatId/{patient_id}")
+    @Transactional(rollbackFor = Exception.class)
+    @UnInterception
+    public JsonResult getDocsByPatientId(@PathVariable Integer patient_id) {
+        List<Doctor> doctors = universalService.getDocsByPatientId(patient_id);
+        if (doctors != null) {
+            return new JsonResult<>(doctors,Constants.SUCCESS_CODE,"根据患者id获取预约的所以医生的医生信息成功！");
+        } else {
+            return new JsonResult<>(doctors,"404","根据患者id获取预约的所以医生的医生信息失败，没有内容！");
+        }
+    }
 
 }

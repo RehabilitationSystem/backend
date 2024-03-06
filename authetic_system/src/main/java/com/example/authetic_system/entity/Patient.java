@@ -33,8 +33,8 @@ public class Patient {
     @Column(name = "ppassword")
     private String ppassword;
 
-    @Column(name = "prole")
-    private Integer prole;
+    @Column(name = "role")
+    private Integer role;
 
     public Patient(String paccount, String ppassword) {
         this.paccount = paccount;
@@ -97,12 +97,12 @@ public class Patient {
         this.ppassword = ppassword;
     }
 
-    public Integer getProle() {
-        return prole;
+    public Integer getRole() {
+        return role;
     }
 
-    public void setProle(Integer prole) {
-        this.prole = prole;
+    public void setProle(Integer role) {
+        this.role = role;
     }
 
 

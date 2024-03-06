@@ -9,10 +9,10 @@ import java.util.List;
 
 @Mapper
 public interface UniversalMapper {
-    @Insert("INSERT INTO doctor(major_field, department, department_address, dname, dage, dgender, daccount, dpassword, drole) " + "VALUES(#{majorField}, #{department}, #{departmentAddress}, #{dname}, #{dage}, #{dgender}, #{daccount}, #{dpassword}, #{drole})")
+    @Insert("INSERT INTO doctor(major_field, department, department_address, dname, dage, dgender, daccount, dpassword, role) " + "VALUES(#{majorField}, #{department}, #{departmentAddress}, #{dname}, #{dage}, #{dgender}, #{daccount}, #{dpassword}, #{role})")
     Integer insertDoctor(Doctor doctor);
 
-    @Insert("INSERT INTO Patient(medical_information, pname, pgender, paccount, page, ppassword, prole) " + "VALUES(#{medical_information}, #{department}, #{pname}, #{pgender}, #{paccount}, #{page}, #{ppassword}, #{prole}, ")
+    @Insert("INSERT INTO Patient(medical_information, pname, pgender, paccount, page, ppassword, role) " + "VALUES(#{medical_information}, #{department}, #{pname}, #{pgender}, #{paccount}, #{page}, #{ppassword}, #{role}, ")
     Integer insertPatient(Patient patient);
 
     @Update("UPDATE `equipment` SET equipment_status = #{equipmentStatus} WHERE equipment_id = #{equipmentId};")
@@ -43,6 +43,15 @@ public interface UniversalMapper {
     })
     List<Patient> getAllPatients();
 
-
+    @Select("WITH RankedDoctors AS (\n" +
+            "    SELECT d.*,\n" +
+            "           ROW_NUMBER() OVER (PARTITION BY d.doctor_id ORDER BY d.doctor_id) AS RowNum\n" +
+            "    FROM patient p\n" +
+            "    INNER JOIN reserve r ON p.patient_id = r.patient_id\n" +
+            "    INNER JOIN doctor d ON r.doctor_id = d.doctor_id\n" +
+            "    WHERE p.patient_id = #{patient_id}\n" +
+            ")\n" +
+            "SELECT * FROM RankedDoctors WHERE RowNum = 1;\n")
+    List <Doctor> getDocsByPatientId(Integer patient_id);
 
 }

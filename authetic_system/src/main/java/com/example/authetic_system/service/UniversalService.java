@@ -23,4 +23,6 @@ public interface UniversalService {
     List<Equipment> getAllEquipment();
 
     List<Patient> getAllPatients();
+
+    List<Doctor> getDocsByPatientId(Integer patient_id);
 }
