@@ -15,4 +15,9 @@ public class TransTimeUtils {
        LocalDateTime localDateTime = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
        return localDateTime;
    }
+
+    // 新增的方法，将LocalDateTime转换为时间戳
+    public static Long transLocalDateTimeToTimeStamp(LocalDateTime localDateTime) {
+        return localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
 }

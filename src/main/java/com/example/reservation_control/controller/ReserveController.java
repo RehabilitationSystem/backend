@@ -9,10 +9,13 @@ import com.example.commons.service.TransTimeUtils;
 import com.example.reservation_control.entity.Reserve;
 import com.example.reservation_control.entity.ReserveForTimeStamp;
 import com.example.reservation_control.service.ReserveService;
+import com.example.treatment_system.entity.Treatment;
+import com.example.treatment_system.entity.TreatmentForStamp;
 import jakarta.annotation.Resource;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -29,12 +32,18 @@ public class ReserveController {
         String msg;
         Reserve reserve = new Reserve(r.getReservationId(),r.getPatientId(),r.getDoctorId(),TransTimeUtils.transTimeStamp(r.getTreatmentTime()),r.getReservationContext(),r.getAppointmentStatus(),r.getCost(),r.getEvaluation());
         List<Reserve> reserves = reserveService.insertRes(reserve);
+        List<ReserveForTimeStamp> reserveForTimeStamps = new ArrayList<>();
         if(reserves.size()>0){
             msg = "预约记录插入成功！";
         }else {
             msg = "预约记录插入失败！";
         }
-        return new JsonResult(reserves,Constants.SUCCESS_CODE,msg);
+        for (Reserve entity : reserves) {
+            ReserveForTimeStamp stamp = new ReserveForTimeStamp(entity);
+            stamp.setTreatmentTime(TransTimeUtils.transLocalDateTimeToTimeStamp(entity.getTreatmentTime()));
+            reserveForTimeStamps.add(stamp);
+        }
+        return new JsonResult(reserveForTimeStamps,Constants.SUCCESS_CODE,msg);
     }
 
     @DeleteMapping("/{reserveId}")
@@ -55,7 +64,13 @@ public class ReserveController {
     @UnInterception
     public JsonResult getByResID(@PathVariable Integer reservationId) {
         List<Reserve> reserves = reserveService.getByResID(reservationId);
+        List<ReserveForTimeStamp> reserveForTimeStamps = new ArrayList<>();
         if (reserves != null && !reserves.isEmpty()) {
+            for (Reserve entity : reserves) {
+                ReserveForTimeStamp stamp = new ReserveForTimeStamp(entity);
+                stamp.setTreatmentTime(TransTimeUtils.transLocalDateTimeToTimeStamp(entity.getTreatmentTime()));
+                reserveForTimeStamps.add(stamp);
+            }
             return new JsonResult<>(reserves,Constants.SUCCESS_CODE,"根据预约id获取信息成功");
         } else {
             return new JsonResult<>("404","根据预约id找不到对应的信息");
@@ -68,7 +83,13 @@ public class ReserveController {
     @UnInterception
     public JsonResult getByUserID(@PathVariable Integer goalId) {
         List<Reserve> reserves = reserveService.getByUserID(goalId);
+        List<ReserveForTimeStamp> reserveForTimeStamps = new ArrayList<>();
         if (reserves != null && !reserves.isEmpty()) {
+            for (Reserve entity : reserves) {
+                ReserveForTimeStamp stamp = new ReserveForTimeStamp(entity);
+                stamp.setTreatmentTime(TransTimeUtils.transLocalDateTimeToTimeStamp(entity.getTreatmentTime()));
+                reserveForTimeStamps.add(stamp);
+            }
             return new JsonResult<>(reserves,Constants.SUCCESS_CODE,"根据用户ID获取预订列表成功");
         } else {
             // 如果没有找到任何预订，返回404 Not Found

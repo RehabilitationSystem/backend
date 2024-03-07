@@ -1,9 +1,13 @@
 package com.example.reservation_control.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReserveForTimeStamp {
 
 
@@ -85,5 +89,15 @@ public class ReserveForTimeStamp {
 
     public void setEvaluation(String evaluation) {
         this.evaluation = evaluation;
+    }
+
+    public ReserveForTimeStamp(Reserve r) {
+        this.reservationId = r.getReservationId();
+        this.patientId = r.getPatientId();
+        this.doctorId = r.getDoctorId();
+        this.reservationContext = r.getReservationContext();
+        this.appointmentStatus = r.getAppointmentStatus();
+        this.cost = r.getCost();
+        this.evaluation = r.getEvaluation();
     }
 }

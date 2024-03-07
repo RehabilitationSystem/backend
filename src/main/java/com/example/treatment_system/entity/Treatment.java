@@ -1,5 +1,6 @@
 package com.example.treatment_system.entity;
 
+import com.example.commons.service.TransTimeUtils;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -104,12 +105,25 @@ public class Treatment {
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;  
     }  
-  
+
+
     public LocalDateTime getEndTime() {
         return endTime;  
     }  
   
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;  
-    }  
+    }
+
+    public Treatment(TreatmentForStamp t) {
+        this.treatmentId = t.getTreatmentId();
+        this.patientId = t.getPatientId();
+        this.treatmentType = t.getTreatmentType();
+        this.treatmentDuration = t.getTreatmentDuration();
+        this.doctorId = t.getDoctorId();
+        this.treatmentStatus = t.getTreatmentStatus();
+        this.equipmentId = t.getEquipmentId();
+    }
+
+
 }

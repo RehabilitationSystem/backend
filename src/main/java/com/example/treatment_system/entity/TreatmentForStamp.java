@@ -1,12 +1,10 @@
 package com.example.treatment_system.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class TreatmentForStamp {
 
     private Integer treatmentId;
@@ -99,5 +97,15 @@ public class TreatmentForStamp {
 
     public void setEndTime(Long endTime) {
         this.endTime = endTime;
+    }
+
+    public TreatmentForStamp(Treatment t) {
+        this.treatmentId = t.getTreatmentId();
+        this.patientId = t.getPatientId();
+        this.treatmentType = t.getTreatmentType();
+        this.treatmentDuration = t.getTreatmentDuration();
+        this.doctorId = t.getDoctorId();
+        this.treatmentStatus = t.getTreatmentStatus();
+        this.equipmentId = t.getEquipmentId();
     }
 }
