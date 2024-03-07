@@ -8,8 +8,8 @@ public class Equipment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "equipment_id")
-    private int equipmentId;
+    @Column(name = "id")
+    private int Id;
 
     @Column(name = "equipment_type")
     private String equipmentType;
@@ -20,17 +20,16 @@ public class Equipment {
     @Column(name = "equipment_status")
     private Integer equipmentStatus;
 
-    @Column(name = "ename")
-    private String ename;
+    @Column(name = "name")
+    private String name;
 
-    // Getters and Setters
 
-    public int getEquipmentId() {
-        return equipmentId;
+    public int getId() {
+        return Id;
     }
 
-    public void setEquipmentId(int equipmentId) {
-        this.equipmentId = equipmentId;
+    public void setId(int id) {
+        Id = id;
     }
 
     public String getEquipmentType() {
@@ -57,11 +56,11 @@ public class Equipment {
         this.equipmentStatus = equipmentStatus;
     }
 
-    public String getEname() {
-        return ename;
+    public String getName() {
+        return name;
     }
 
-    public void setEname(String ename) {
-        this.ename = ename;
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -44,7 +44,7 @@ public class UniversalServiceImpl implements UniversalService{
     public Doctor docLogin(String account, String pwd) {
         Doctor doctor = universalMapper.getDoctorByDoctorAccount(account);
         if(doctor==null){return null;}
-        if(pwd.equals(doctor.getDpassword())){
+        if(pwd.equals(doctor.getPassword())){
             return doctor;
         }
         return null;
@@ -54,7 +54,7 @@ public class UniversalServiceImpl implements UniversalService{
     public Patient patLogin(String account, String pwd) {
         Patient patient = universalMapper.getPatientByPatientAccount(account);
         if(patient==null){return null;}
-        if(pwd.equals(patient.getPpassword())){
+        if(pwd.equals(patient.getPassword())){
             return patient;
         }
         return null;

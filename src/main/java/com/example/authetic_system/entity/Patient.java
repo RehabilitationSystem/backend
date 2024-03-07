@@ -12,41 +12,41 @@ public class Patient {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "patient_id")
-    private int patientId;
+    @Column(name = "id")
+    private int Id;
 
     @Column(name = "medical_information")
     private String medicalInformation;
 
-    @Column(name = "pname")
-    private String pname;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "pgender")
-    private String pgender;
+    @Column(name = "gender")
+    private String gender;
 
-    @Column(name = "paccount")
-    private String paccount;
+    @Column(name = "account")
+    private String account;
 
-    @Column(name = "page")
-    private Integer page;
+    @Column(name = "age")
+    private Integer age;
 
-    @Column(name = "ppassword")
-    private String ppassword;
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "role")
     private Integer role;
 
-    public Patient(String paccount, String ppassword) {
-        this.paccount = paccount;
-        this.ppassword = ppassword;
+    public Patient(String account, String password) {
+        this.account = account;
+        this.password = password;
     }
 
-    public int getPatientId() {
-        return patientId;
+    public int getId() {
+        return Id;
     }
 
-    public void setPatientId(int patientId) {
-        this.patientId = patientId;
+    public void setId(int id) {
+        Id = id;
     }
 
     public String getMedicalInformation() {
@@ -57,53 +57,51 @@ public class Patient {
         this.medicalInformation = medicalInformation;
     }
 
-    public String getPname() {
-        return pname;
+    public String getName() {
+        return name;
     }
 
-    public void setPname(String pname) {
-        this.pname = pname;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPgender() {
-        return pgender;
+    public String getGender() {
+        return gender;
     }
 
-    public void setPgender(String pgender) {
-        this.pgender = pgender;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
-    public String getPaccount() {
-        return paccount;
+    public String getAccount() {
+        return account;
     }
 
-    public void setPaccount(String paccount) {
-        this.paccount = paccount;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
-    public Integer getPage() {
-        return page;
+    public Integer getAge() {
+        return age;
     }
 
-    public void setPage(Integer page) {
-        this.page = page;
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
-    public String getPpassword() {
-        return ppassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPpassword(String ppassword) {
-        this.ppassword = ppassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Integer getRole() {
         return role;
     }
 
-    public void setProle(Integer role) {
+    public void setRole(Integer role) {
         this.role = role;
     }
-
-
 }

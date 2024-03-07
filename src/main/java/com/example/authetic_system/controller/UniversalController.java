@@ -91,7 +91,7 @@ public class UniversalController {
         if (doctor != null) {
             return new JsonResult(doctor, Constants.SUCCESS_CODE, "login成功！");
         }
-        return new JsonResult(patient, Constants.SUCCESS_CODE, "login成功！");
+        return new JsonResult(patient,"402" , "login失败！");
 
     }
 

@@ -9,8 +9,8 @@ public class Doctor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "doctor_id")
-    private int doctorId;
+    @Column(name = "id")
+    private int Id;
 
     @Column(name = "major_field")
     private String majorField;
@@ -21,39 +21,39 @@ public class Doctor {
     @Column(name = "department_address")
     private String departmentAddress;
 
-    @Column(name = "dname")
-    private String dname;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "dage")
-    private Integer dage;
+    @Column(name = "age")
+    private Integer age;
 
-    @Column(name = "dgender")
-    private String dgender;
+    @Column(name = "gender")
+    private String gender;
 
-    @Column(name = "daccount")
-    private String daccount;
+    @Column(name = "account")
+    private String account;
 
-    @Column(name = "dpassword")
-    private String dpassword;
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "role")
     private Integer role;
 
-    public Doctor(String daccount, String dpassword) {
-        this.daccount = daccount;
-        this.dpassword = dpassword;
+    public Doctor(String account, String password) {
+        this.account = account;
+        this.password = password;
     }
 
     public Doctor() {
 
     }
 
-    public int getDoctorId() {
-        return doctorId;
+    public int getId() {
+        return Id;
     }
 
-    public void setDoctorId(int doctorId) {
-        this.doctorId = doctorId;
+    public void setId(int id) {
+        Id = id;
     }
 
     public String getMajorField() {
@@ -80,51 +80,51 @@ public class Doctor {
         this.departmentAddress = departmentAddress;
     }
 
-    public String getDname() {
-        return dname;
+    public String getName() {
+        return name;
     }
 
-    public void setDname(String dname) {
-        this.dname = dname;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Integer getDage() {
-        return dage;
+    public Integer getAge() {
+        return age;
     }
 
-    public void setDage(Integer dage) {
-        this.dage = dage;
+    public void setAge(Integer age) {
+        this.age = age;
     }
 
-    public String getDgender() {
-        return dgender;
+    public String getGender() {
+        return gender;
     }
 
-    public void setDgender(String dgender) {
-        this.dgender = dgender;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
-    public String getDaccount() {
-        return daccount;
+    public String getAccount() {
+        return account;
     }
 
-    public void setDaccount(String daccount) {
-        this.daccount = daccount;
+    public void setAccount(String account) {
+        this.account = account;
     }
 
-    public String getDpassword() {
-        return dpassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setDpassword(String dpassword) {
-        this.dpassword = dpassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Integer getRole() {
         return role;
     }
 
-    public void setRole(Integer drole) {
-        this.role = drole;
+    public void setRole(Integer role) {
+        this.role = role;
     }
 }
