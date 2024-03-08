@@ -41,6 +41,12 @@ public class Patient {
         this.password = password;
     }
 
+    public Patient(String account, String password, Integer role) {
+        this.account = account;
+        this.password = password;
+        this.role = role;
+    }
+
     public int getId() {
         return Id;
     }
@@ -56,6 +62,8 @@ public class Patient {
     public void setMedicalInformation(String medicalInformation) {
         this.medicalInformation = medicalInformation;
     }
+
+
 
     public String getName() {
         return name;

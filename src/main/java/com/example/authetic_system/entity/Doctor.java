@@ -44,6 +44,12 @@ public class Doctor {
         this.password = password;
     }
 
+    public Doctor(String account, String password, Integer role) {
+        this.account = account;
+        this.password = password;
+        this.role = role;
+    }
+
     public Doctor() {
 
     }

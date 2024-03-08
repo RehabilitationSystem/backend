@@ -18,18 +18,26 @@ public class UniversalServiceImpl implements UniversalService{
     private UniversalMapper universalMapper;
     @Override
     public Doctor docRegister(Doctor doctor){
-        if(universalMapper.insertDoctor(doctor)==0){
-            throw new BusinessErrorException(BusinessMsgEnum.DATA_INSERT_EXCEPTION);
+        Doctor doctor1 = universalMapper.getDoctorByDoctorAccount(doctor.getAccount());
+        if(doctor1==null){
+            if(universalMapper.insertDoctor(doctor)==0){
+                throw new BusinessErrorException(BusinessMsgEnum.DATA_INSERT_EXCEPTION);
+            }
+            return doctor;
         }
-        return doctor;
+        throw new BusinessErrorException(BusinessMsgEnum.USER_IS_EXISTED);
     }
 
     @Override
     public Patient paRegister(Patient patient) {
-        if(universalMapper.insertPatient(patient)==0){
-            throw new BusinessErrorException(BusinessMsgEnum.DATA_INSERT_EXCEPTION);
+        Patient patientByPatientAccount = universalMapper.getPatientByPatientAccount(patient.getAccount());
+        if(patientByPatientAccount==null){
+            if(universalMapper.insertPatient(patient)==0){
+                throw new BusinessErrorException(BusinessMsgEnum.DATA_INSERT_EXCEPTION);
+            }
+            return patient;
         }
-        return patient;
+        throw new BusinessErrorException(BusinessMsgEnum.USER_IS_EXISTED);
     }
 
     @Override

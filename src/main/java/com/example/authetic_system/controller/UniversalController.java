@@ -26,13 +26,13 @@ public class UniversalController {
     @PostMapping("/1.0/register")
     @UnInterception
     public JsonResult Register (@RequestBody UserRegister userRegister){
-        if(userRegister.getRole()==0) {
-            Doctor doctor = new Doctor(userRegister.getAccount(),userRegister.getPassword());
+        if(userRegister.getRole()==1) {
+            Doctor doctor = new Doctor(userRegister.getAccount(),userRegister.getPassword(),userRegister.getRole());
             universalService.docRegister(doctor);
         }
 
         else {
-            Patient patient = new Patient(userRegister.getAccount(),userRegister.getPassword());
+            Patient patient = new Patient(userRegister.getAccount(),userRegister.getPassword(),userRegister.getRole());
             universalService.paRegister(patient);
         }
 
@@ -41,8 +41,8 @@ public class UniversalController {
 //根据医生id查询医生信息
     @GetMapping("/1.0/getADoc/{doctorId}")
     @UnInterception
-    public Doctor getADoctor(@PathVariable  int doctorId) {
-        return universalService.getDoctorByDoctorId(doctorId);
+    public JsonResult getADoctor(@PathVariable  int doctorId) {
+        return new JsonResult<>(universalService.getDoctorByDoctorId(doctorId),Constants.SUCCESS_CODE,"注册成功！");
     }
 //查询医生列表
     @GetMapping("/1.0/getAllDoc")

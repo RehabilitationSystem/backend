@@ -12,7 +12,8 @@ public interface UniversalMapper {
     @Insert("INSERT INTO doctor(major_field, department, department_address, name, age, gender, account, password, role) " + "VALUES(#{majorField}, #{department}, #{departmentAddress}, #{name}, #{age}, #{gender}, #{account}, #{password}, #{role})")
     Integer insertDoctor(Doctor doctor);
 
-    @Insert("INSERT INTO Patient(medical_information, name, gender, account, age, password, role) " + "VALUES(#{medical_information}, #{department}, #{name}, #{gender}, #{account}, #{age}, #{password}, #{role}, ")
+    @Insert("INSERT INTO Patient(medical_information, name, gender, account, age, password, role) \n" +
+            "VALUES(#{medicalInformation}, #{name}, #{gender}, #{account}, #{age}, #{password}, #{role})\n")
     Integer insertPatient(Patient patient);
 
     @Update("UPDATE `equipment` SET equipment_status = #{equipmentStatus} WHERE id = #{id};")
