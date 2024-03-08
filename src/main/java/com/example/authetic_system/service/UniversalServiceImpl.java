@@ -74,6 +74,11 @@ public class UniversalServiceImpl implements UniversalService{
     }
 
     @Override
+    public Patient getPaByPaId(int Id) {
+        return universalMapper.getPaByPaId(Id);
+    }
+
+    @Override
     public List<Doctor> getAllDoctors() {
         return universalMapper.getAllDoctors();
     }

@@ -23,6 +23,9 @@ public interface UniversalMapper {
     @Select("SELECT * FROM doctor WHERE id = #{doctorId}")
     Doctor getDoctorByDoctorId(int doctorId);
 
+    @Select("SELECT * FROM patient WHERE id = #{Id}")
+    Patient getPaByPaId(int Id);
+
     @Select("SELECT * FROM doctor WHERE account = #{account}")
     Doctor getDoctorByDoctorAccount(String account);
 

@@ -16,6 +16,8 @@ public interface UniversalService {
     Patient patLogin(String account,String pwd);
     Doctor getDoctorByDoctorId(int doctorId);
 
+    Patient getPaByPaId(int Id);
+
     List<Doctor> getAllDoctors();
 
     Equipment getEquipmentByEquipmentId(Integer equipment_Id);

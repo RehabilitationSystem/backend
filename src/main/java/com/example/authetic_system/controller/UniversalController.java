@@ -42,8 +42,20 @@ public class UniversalController {
     @GetMapping("/1.0/getADoc/{doctorId}")
     @UnInterception
     public JsonResult getADoctor(@PathVariable  int doctorId) {
-        return new JsonResult<>(universalService.getDoctorByDoctorId(doctorId),Constants.SUCCESS_CODE,"注册成功！");
+        ArrayList<Doctor> doctors = new ArrayList<>();
+        doctors.add(universalService.getDoctorByDoctorId(doctorId));
+        return new JsonResult<>(doctors,Constants.SUCCESS_CODE,"获取医生信息成功！");
     }
+
+    //根据患者id查询患者信息
+    @GetMapping("/1.0/getAPat/{patientId}")
+    @UnInterception
+    public JsonResult getAPatient(@PathVariable  int patientId) {
+        ArrayList<Patient> patients = new ArrayList<>();
+        patients.add(universalService.getPaByPaId(patientId));
+        return new JsonResult<>(patients,Constants.SUCCESS_CODE,"获取患者信息成功！");
+    }
+
 //查询医生列表
     @GetMapping("/1.0/getAllDoc")
     @UnInterception
