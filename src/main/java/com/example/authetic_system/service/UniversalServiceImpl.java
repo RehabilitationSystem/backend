@@ -8,6 +8,7 @@ import com.example.commons.exceptiondeal.BusinessErrorException;
 import com.example.commons.exceptiondeal.BusinessMsgEnum;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -101,6 +102,23 @@ public class UniversalServiceImpl implements UniversalService{
     @Override
     public List<Doctor> getDocsByPatientId(Integer patient_id) {
         return universalMapper.getDocsByPatientId(patient_id);
+    }
+
+    @Override
+    public Patient updatePatient(Patient patient) {
+        if(universalMapper.updatePatient(patient)==0){
+            return null;
+        }
+        return universalMapper.getPaByPaId(patient.getId());
+
+    }
+
+    @Override
+    public Doctor updateDoctor(Doctor doctor) {
+        if(universalMapper.updateDoctor(doctor)==0){
+            return null;
+        }
+        return universalMapper.getDoctorByDoctorId(doctor.getId());
     }
 
 

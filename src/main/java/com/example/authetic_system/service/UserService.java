@@ -1,11 +1,13 @@
 package com.example.authetic_system.service;
 
 
+import com.example.authetic_system.entity.Doctor;
 import com.example.authetic_system.entity.hide.Patient;
 import com.example.authetic_system.entity.hide.Url;
 import com.example.authetic_system.entity.hide.User;
 import com.example.authetic_system.entity.hide.UserRole;
 import jakarta.servlet.http.HttpSession;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 import java.util.Set;
@@ -40,4 +42,5 @@ public interface UserService {
     void loginDataRedis(String sign,HttpSession httpSession, Long userId,Long counter);
 
     List<User> getAllUsers();
+
 }

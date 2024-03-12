@@ -55,4 +55,27 @@ public interface UniversalMapper {
             "LIMIT 1;")
     List <Doctor> getDocsByPatientId(Integer patient_id);
 
+    @Update("UPDATE patient SET " +
+            "medical_information = #{medicalInformation}, " +
+            "name = #{name}, " +
+            "gender = #{gender}, " +
+            "account = #{account}, " +
+            "age = #{age}, " +
+            "password = #{password}, " +
+            "role = #{role} " +
+            "WHERE id = #{id}")
+    Integer updatePatient(Patient patient);
+
+    @Update("UPDATE doctor SET " +
+            "major_field = #{majorField}, " +
+            "department = #{department}, " +
+            "department_address = #{departmentAddress}, " +
+            "name = #{name}, " +
+            "age = #{age}, " +
+            "gender = #{gender}, " +
+            "account = #{account}, " +
+            "password = #{password}, " +
+            "role = #{role} " +
+            "WHERE id = #{id}")
+    Integer updateDoctor(Doctor doctor);
 }

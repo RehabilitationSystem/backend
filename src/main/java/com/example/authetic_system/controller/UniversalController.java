@@ -8,7 +8,9 @@ import com.example.authetic_system.entity.Doctor;
 import com.example.authetic_system.entity.Equipment;
 import com.example.authetic_system.entity.Patient;
 import com.example.authetic_system.service.UniversalService;
+import com.example.commons.exceptiondeal.BusinessMsgEnum;
 import jakarta.annotation.Resource;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -118,6 +120,34 @@ public class UniversalController {
         } else {
             return new JsonResult<>(doctors,"404","根据患者id获取预约的所以医生的医生信息失败，没有内容！");
         }
+    }
+
+    //根据医生json修改医生信息
+    @PutMapping("/1.0/updateDoctor")
+    @Transactional(rollbackFor = Exception.class)
+    @UnInterception
+    public JsonResult updateDoctor(@RequestBody Doctor doctor) {
+        Doctor doctor1 = universalService.updateDoctor(doctor);
+        if (doctor1 == null) {
+            return new JsonResult<>(BusinessMsgEnum.DATA_UPDATE_EXCEPTION.getCode(),BusinessMsgEnum.DATA_UPDATE_EXCEPTION.getMsg());
+        } else {
+            return new JsonResult<>(doctor1,Constants.SUCCESS_CODE,"根据医生json修改医生信息成功");
+        }
+
+    }
+
+    //根据患者json修改患者信息
+    @PutMapping("/1.0/updatePatient")
+    @Transactional(rollbackFor = Exception.class)
+    @UnInterception
+    public JsonResult updatePatient(@RequestBody Patient patient) {
+        Patient patient1 = universalService.updatePatient(patient);
+        if (patient1 == null) {
+            return new JsonResult<>(BusinessMsgEnum.DATA_UPDATE_EXCEPTION.getCode(),BusinessMsgEnum.DATA_UPDATE_EXCEPTION.getMsg());
+        } else {
+            return new JsonResult<>(patient1,Constants.SUCCESS_CODE,"根据医生json修改患者信息成功");
+        }
+
     }
 
 }
