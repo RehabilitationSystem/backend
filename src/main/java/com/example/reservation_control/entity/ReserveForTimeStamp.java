@@ -27,6 +27,17 @@ public class ReserveForTimeStamp {
 
     private String evaluation;
 
+    @Column(name = "completed")
+    private Integer completed;
+
+    public Integer getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(Integer completed) {
+        this.completed = completed;
+    }
+
     public Integer getReservationId() {
         return reservationId;
     }
@@ -99,5 +110,6 @@ public class ReserveForTimeStamp {
         this.appointmentStatus = r.getAppointmentStatus();
         this.cost = r.getCost();
         this.evaluation = r.getEvaluation();
+        this.completed=r.getCompleted();
     }
 }

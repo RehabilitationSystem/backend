@@ -30,7 +30,7 @@ public class ReserveController {
     @UnInterception
     public JsonResult insertReserve (@RequestBody ReserveForTimeStamp r){
         String msg;
-        Reserve reserve = new Reserve(r.getReservationId(),r.getPatientId(),r.getDoctorId(),TransTimeUtils.transTimeStamp(r.getTreatmentTime()),r.getReservationContext(),r.getAppointmentStatus(),r.getCost(),r.getEvaluation());
+        Reserve reserve = new Reserve(r.getReservationId(),r.getPatientId(),r.getDoctorId(),TransTimeUtils.transTimeStamp(r.getTreatmentTime()),r.getReservationContext(),r.getAppointmentStatus(),r.getCost(),r.getEvaluation(),r.getCompleted());
         List<Reserve> reserves = reserveService.insertRes(reserve);
         List<ReserveForTimeStamp> reserveForTimeStamps = new ArrayList<>();
         if(reserves.size()>0){
@@ -106,6 +106,21 @@ public class ReserveController {
             // 调用服务层方法更改状态
             reserveService.chgStatus(reserve.getReservationId(),reserve.getAppointmentStatus());
             return new JsonResult<>(Constants.SUCCESS_CODE,"根据用户ID获取预订列表成功");
+        } catch (BusinessErrorException e) {
+            // 捕获业务异常并返回相应的错误信息
+            return new JsonResult("500",e.getMessage());
+        }
+    }
+
+    //更改预订状态
+    @PutMapping("/completed")
+    @Transactional(rollbackFor = Exception.class)
+    @UnInterception
+    public JsonResult chgCompleted(@RequestBody Reserve reserve) {
+        try {
+            // 调用服务层方法更改状态
+            reserveService.chgCompleted(reserve.getReservationId(),reserve.getCompleted());
+            return new JsonResult<>(Constants.SUCCESS_CODE,"修改成功");
         } catch (BusinessErrorException e) {
             // 捕获业务异常并返回相应的错误信息
             return new JsonResult("500",e.getMessage());

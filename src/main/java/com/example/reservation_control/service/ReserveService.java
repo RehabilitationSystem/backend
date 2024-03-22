@@ -10,6 +10,8 @@ public interface ReserveService {
 
     Integer chgStatus(Integer reservation_id,Integer status);
 
+    Integer chgCompleted(Integer reservation_id,Integer completed);
+
     List<Reserve> getByResID(Integer reservation_id);
 
     List<Reserve> getByUserID(Integer goal_id);

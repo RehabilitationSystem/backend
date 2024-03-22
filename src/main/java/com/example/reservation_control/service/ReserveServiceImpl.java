@@ -34,6 +34,14 @@ public class ReserveServiceImpl implements ReserveService{
     }
 
     @Override
+    public Integer chgCompleted(Integer reservation_id, Integer completed) {
+        if(reserveMapper.changeCompleted(reservation_id,completed)==0){
+            throw new BusinessErrorException(BusinessMsgEnum.DATA_UPDATE_EXCEPTION);
+        }
+        return null;
+    }
+
+    @Override
     public List<Reserve> getByResID(Integer reservation_id) {
         return reserveMapper.getByReserveID(reservation_id);
     }

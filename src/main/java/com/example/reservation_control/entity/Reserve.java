@@ -38,9 +38,20 @@ public class Reserve {
     private BigDecimal cost;
   
     @Column(name = "evaluation")  
-    private String evaluation;  
-  
-    // Getters and Setters  
+    private String evaluation;
+
+    @Column(name = "completed")
+    private Integer completed;
+
+    public Integer getCompleted() {
+        return completed;
+    }
+
+    public void setCompleted(Integer completed) {
+        this.completed = completed;
+    }
+
+    // Getters and Setters
     public Integer getReservationId() {  
         return reservationId;  
     }  
