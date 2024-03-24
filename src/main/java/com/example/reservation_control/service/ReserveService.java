@@ -18,5 +18,6 @@ public interface ReserveService {
 
     List<Reserve> insertRes(Reserve reserve );
 
+    List<Reserve> getsAllReserve();
 
 }

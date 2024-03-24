@@ -128,4 +128,12 @@ public class ReserveController {
     }
 
 
+
+    // 根据用户ID获取预订列表
+    @GetMapping("")
+    @Transactional(rollbackFor = Exception.class)
+    @UnInterception
+    public JsonResult getsAllReserve(){
+        return new JsonResult(reserveService.getsAllReserve(), Constants.SUCCESS_CODE,"获取成功");
+    }
 }

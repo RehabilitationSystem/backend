@@ -27,5 +27,8 @@ public interface ReserveMapper {
         @Options(useGeneratedKeys = true, keyProperty = "reservationId", keyColumn = "reservation_id")
         Integer insertReserve(Reserve reserve);
 
+        @Select("Select * from reserve")
+        List<Reserve> getsAllReserve();
+
 }
 

@@ -62,5 +62,10 @@ public class ReserveServiceImpl implements ReserveService{
         return Collections.emptyList();
     }
 
+    @Override
+    public List<Reserve> getsAllReserve() {
+        return reserveMapper.getsAllReserve();
+    }
+
 
 }
