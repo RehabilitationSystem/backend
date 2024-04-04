@@ -50,7 +50,14 @@ public class RegistrationController {
     @Transactional(rollbackFor = Exception.class)
     @UnInterception
     public JsonResult getAllRegistration() {
-            return new JsonResult<>(registrationService.getAllRegistration(),Constants.SUCCESS_CODE,"成功");
+        List<Registration> allRegistration = registrationService.getAllRegistration();
+        List<RegistrationForTimeStamp> registrationForTimeStamps = new ArrayList<>();
+        for(Registration registration:allRegistration){
+            RegistrationForTimeStamp aStamp = new RegistrationForTimeStamp(registration);
+            aStamp.setRegistrationTime(TransTimeUtils.transLocalDateTimeToTimeStamp(registration.getRegistrationTime()));
+            registrationForTimeStamps.add(aStamp);
+        }
+        return new JsonResult<>(registrationForTimeStamps,Constants.SUCCESS_CODE,"成功");
     }
 
     //更改状态
