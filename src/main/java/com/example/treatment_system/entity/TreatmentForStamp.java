@@ -11,6 +11,7 @@ public class TreatmentForStamp {
 
     private Integer patientId;
 
+    private Integer reservationId;
 
     private String treatmentType;
 
@@ -26,7 +27,14 @@ public class TreatmentForStamp {
 
     private Long endTime;
 
-    // Getters and Setters
+    public Integer getReservationId() {
+        return reservationId;
+    }
+
+    public void setReservationId(Integer reservationId) {
+        this.reservationId = reservationId;
+    }
+
     public Integer getTreatmentId() {
         return treatmentId;
     }

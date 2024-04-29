@@ -90,10 +90,10 @@ public class ReserveController {
                 stamp.setTreatmentTime(TransTimeUtils.transLocalDateTimeToTimeStamp(entity.getTreatmentTime()));
                 reserveForTimeStamps.add(stamp);
             }
-            return new JsonResult<>(reserves,Constants.SUCCESS_CODE,"根据用户ID获取预订列表成功");
+            return new JsonResult<>(reserveForTimeStamps,Constants.SUCCESS_CODE,"根据用户ID获取预订列表成功");
         } else {
             // 如果没有找到任何预订，返回404 Not Found
-            return new JsonResult<>(reserves,"404","根据用户ID获取预订列表失败,查没有内容");
+            return new JsonResult<>(reserveForTimeStamps,"404","根据用户ID获取预订列表失败,查没有内容");
         }
     }
 

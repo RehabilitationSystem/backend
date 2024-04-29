@@ -19,10 +19,12 @@ import java.util.List;
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurationSupport {
 
+
     /**
      * 使用阿里 FastJson 作为JSON MessageConverter
      * @param converters
      */
+
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
@@ -75,6 +77,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     }
 
 
+
     /*
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -84,6 +87,6 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
                 .allowedHeaders("*") // 允许的请求头
                 .allowCredentials(false); // 是否允许发送Cookie
     }
-    */
-    
+*/
+
 }
