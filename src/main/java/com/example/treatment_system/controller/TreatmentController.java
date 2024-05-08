@@ -42,6 +42,7 @@ public class TreatmentController {
 
         for (Treatment entity : treatments) {
             TreatmentForStamp stamp = new TreatmentForStamp(entity);
+            stamp.setReservationId(t.getReservationId());
             stamp.setStartTime(TransTimeUtils.transLocalDateTimeToTimeStamp(entity.getStartTime()));
             stamp.setEndTime(TransTimeUtils.transLocalDateTimeToTimeStamp(entity.getEndTime()));
             treatmentForStamps.add(stamp);

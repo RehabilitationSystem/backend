@@ -25,7 +25,7 @@ public interface TreatmentMapper {
     List<Treatment> getTreatmentList();
 
 
-    @Select("SELECT * FROM reservation_treatment WHERE reservation_id = #{id}")
+    @Select("SELECT * FROM reservation_treatment WHERE treatment_id = #{id}")
     List<ReservationTreatment> findRTById(@Param("id") int id);
 
     @Insert("INSERT INTO reservation_treatment (reservation_id, treatment_id) VALUES (#{reservationId}, #{treatmentId})")
